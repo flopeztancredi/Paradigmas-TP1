@@ -72,7 +72,6 @@ public class Tablero {
 
     public void mover(Dirección dirección) {
 
-
         var posVieja = player.getPosicion();
         var posNueva = dirección.DirigirMovimiento(posVieja);
         player.Moverse(posNueva);
@@ -81,24 +80,26 @@ public class Tablero {
         for (Robot robot : robots) {
             posVieja = robot.getPosicion();
             robot.Moverse(posNueva);
-            validarColisiones(robot.getPosicion());
             reemplazarCelda(posVieja, robot.getPosicion(), robot);
         }
 
     }
 
-    private void validarColisiones(Vector2 pos) {
-        if (celdas.get(pos).getObjeto() instanceof Jugador) {
-            System.out.println("Perdiste");
-        } else (if celdas.ge) {
-
-        }
-    }
-
     private void reemplazarCelda(Vector2 posAntigua, Vector2 posNueva, Elemento objeto) {
         celdas.get(posAntigua).SacarObjeto();
-        if (!celdas.get(posNueva).AsignarObjeto(objeto)) {
-
+        var nuevaCelda = celdas.get(posNueva);
+        if (!nuevaCelda.AsignarObjeto(objeto)) {
+            if (objeto instanceof Jugador || nuevaCelda.getObjeto() instanceof Jugador) {
+                // perdiste
+            } else {
+                if (objeto instanceof Robot) {
+                    robots.remove(objeto);
+                }
+                if (nuevaCelda.getObjeto() instanceof Robot) {
+                    robots.remove(nuevaCelda.getObjeto());
+                }
+                nuevaCelda.Incendiar(posNueva);
+            }
         }
     }
 }
