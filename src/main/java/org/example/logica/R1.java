@@ -7,6 +7,7 @@ public class R1 extends Robot{
     };
 
     public void Moverse(Vector2 posicion) {
-
+        var movimiento = calcularPosicion(posicion);
+        this.posicion.sumar(movimiento);
     }
 }

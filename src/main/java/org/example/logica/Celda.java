@@ -30,4 +30,6 @@ public class Celda {
     public Elemento getObjeto() {
         return objeto;
     }
+
+    public void Incendiar(Vector2 pos) { objeto = new Fuego(pos);}
 }

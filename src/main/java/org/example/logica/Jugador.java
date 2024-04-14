@@ -6,8 +6,8 @@ public class Jugador extends Elemento implements Movimiento {
         super(pos);
     };
 
-    @Override
     public void Moverse(Vector2 posicion) {
         this.posicion = posicion;
     }
+
 }

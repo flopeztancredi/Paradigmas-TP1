@@ -6,23 +6,11 @@ public class R2 extends Robot {
     }
 
     public void Moverse(Vector2 posicion) {
-
+        var movimiento1 = calcularPosicion(posicion);
+        this.posicion.sumar(movimiento1);
+        var movimiento2 = calcularPosicion(posicion);
+        this.posicion.sumar(movimiento2);
     }
 
-    private Vector2 calcularPosicion(Vector2 posDeseada) {
-        Vector2 direccion = posDeseada.restar(this.posicion);
-        if (direccion.getX() > 0) {
-            direccion.setX(1);
-        } else if (direccion.getX() < 0) {
-            direccion.setX(-1);
-        }
 
-        if (direccion.getY() > 0) {
-            direccion.setY(1);
-        } else if (direccion.getY() < 0) {
-            direccion.setY(-1);
-        }
-
-        return direccion;
-    }
 }
