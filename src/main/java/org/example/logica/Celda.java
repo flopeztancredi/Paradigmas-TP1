@@ -1,35 +1,45 @@
 package org.example.logica;
 
-public class Celda {
-    private Elemento objeto;
+import java.util.ArrayList;
 
-    public Celda(Elemento objeto) {
-        this.objeto = objeto;
+public class Celda {
+    private ArrayList<Elemento> objetos;
+    private boolean incendiada = false;
+
+    public Celda(Elemento e) {
+        this.objetos = new ArrayList<>();
+        this.objetos.add(e);
+    }
+    public Celda() {
+        this.objetos = new ArrayList<>();
     }
 
     public boolean AsignarObjeto(Elemento objeto) {
-        if (!EstaVacia()) {
-            return false;
-        }
-        this.objeto = objeto;
-        return true;
+        var estabaVacia = objetos.isEmpty();
+        this.objetos.add(objeto);
+        return estabaVacia;
     }
 
-    public boolean SacarObjeto(){
-      if (EstaVacia()) {
-          return false;
-      }
-      this.objeto = null;
-      return true;
+    public ArrayList<Elemento> SacarObjetos(){
+        var objetosSacados = this.objetos; // copia o referencia?
+        this.objetos.clear();
+        return objetosSacados;
     };
 
-    public boolean EstaVacia() {
-        return objeto == null;
+    public boolean EstaVacia() {return objetos.isEmpty();}
+
+    public boolean HayRobot() {
+        for (Elemento e : this.objetos) {
+            if (e instanceof Robot) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public Elemento getObjeto() {
-        return objeto;
-    }
+    public ArrayList<Elemento> getObjeto() { return objetos; }
 
-    public void Incendiar(Vector2 pos) { objeto = new Fuego(pos);}
+    public void Incendiar() { this.incendiada = true; }
+
+    public boolean EstaIncendiada() { return this.incendiada; }
 }
