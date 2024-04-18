@@ -5,7 +5,10 @@ public abstract class Robot extends Elemento implements Movimiento {
         super(posicion);
     }
 
-    public abstract void Moverse(Vector2 posición);
+    public void Moverse(Vector2 posicion) {
+        var movimiento = calcularPosicion(posicion);
+        this.posicion.sumar(movimiento);
+    }
 
     protected Vector2 calcularPosicion(Vector2 posDeseada) {
         Vector2 vectorDireccion = posDeseada.restar(this.posicion);

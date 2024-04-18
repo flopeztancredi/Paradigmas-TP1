@@ -74,21 +74,36 @@ public class Tablero {
     public void mover(Dirección dirección) {
 
         var posVieja = player.getPosicion();
-        var posNueva = dirección.DirigirMovimiento(posVieja);
-        if (celdas.get(posNueva).EstaIncendiada()) {
+        var posNueva = dirección.DirigirMovimiento(posVieja, this.filas, this.columnas);
+        player.Moverse(posNueva);
+        if (!celdas.get(posNueva).AsignarObjeto(player)) {
             // perdiste: te prendiste fuego.
             // devolvemos un booleano acá o lo manejamos en colisiones?
             // para mi lo mejor es manejarlo en colisiones, pero poniendolo aca te ahorras los movimientos
             // de los robots
         }
-        player.Moverse(posNueva);
-        celdas.get(posNueva).AsignarObjeto(player);
+
+        for (Robot robot : robots) {
+            if (robot instanceof R2) {
+                robot.Moverse(posNueva);
+            }
+        }
+
+        // la superposicion de dos robots nunca va a pasar durante el movimiento -- siempre hay que
+        // chequearlo al final. Lo que si hay que chequear durante son los incendios. Tiene sentido que
+        // una celda entonces avise que hay que sacar un elemento cuando se asigna y esta esta incendiada.
+        // volver a poner para R1 y R2 los movimientos particulares?... si le encontramos la vuelta a
+        // saber que R2 piso una celda en el medio... quizas devolver como valor la que pisa, pero
+        // que Moverse() tenga que devolver algo para R2 y para R1 no, raro
+
 
         for (Robot robot : robots) {
             posVieja = robot.getPosicion();
             robot.Moverse(posNueva);
             celdas.get(posVieja).SacarObjetos();
-            celdas.get(robot.getPosicion()).AsignarObjeto(robot);
+            if (!celdas.get(robot.getPosicion()).AsignarObjeto(robot)) {
+                robots.remove(robot);
+            }
         }
 
     }

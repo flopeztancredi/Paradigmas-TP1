@@ -15,9 +15,10 @@ public class Celda {
     }
 
     public boolean AsignarObjeto(Elemento objeto) {
-        var estabaVacia = objetos.isEmpty();
-        this.objetos.add(objeto);
-        return estabaVacia;
+        if (!EstaIncendiada()) {
+            this.objetos.add(objeto);
+        }
+        return !EstaIncendiada();
     }
 
     public ArrayList<Elemento> SacarObjetos(){

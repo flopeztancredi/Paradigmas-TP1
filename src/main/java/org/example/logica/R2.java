@@ -5,12 +5,4 @@ public class R2 extends Robot {
         super(posicion);
     }
 
-    public void Moverse(Vector2 posicion) {
-        var movimiento1 = calcularPosicion(posicion);
-        this.posicion.sumar(movimiento1);
-        var movimiento2 = calcularPosicion(posicion);
-        this.posicion.sumar(movimiento2);
-    }
-
-
 }
