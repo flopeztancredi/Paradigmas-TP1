@@ -1,6 +1,7 @@
 package org.example.logica;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -21,7 +22,7 @@ public class Tablero {
         celdas = new HashMap<Vector2, Celda>();
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
-                celdas.put(new Vector2(i, j), new Celda(null));
+                celdas.put(new Vector2(i, j), new Celda());
             }
         }
     }
@@ -72,33 +73,65 @@ public class Tablero {
 
     public void mover(Dirección dirección) {
 
-
         var posVieja = player.getPosicion();
         var posNueva = dirección.DirigirMovimiento(posVieja);
+        if (celdas.get(posNueva).EstaIncendiada()) {
+            // perdiste: te prendiste fuego.
+            // devolvemos un booleano acá o lo manejamos en colisiones?
+            // para mi lo mejor es manejarlo en colisiones, pero poniendolo aca te ahorras los movimientos
+            // de los robots
+        }
         player.Moverse(posNueva);
-        reemplazarCelda(posVieja, player.getPosicion(), player);
+        celdas.get(posNueva).AsignarObjeto(player);
 
         for (Robot robot : robots) {
             posVieja = robot.getPosicion();
             robot.Moverse(posNueva);
-            validarColisiones(robot.getPosicion());
-            reemplazarCelda(posVieja, robot.getPosicion(), robot);
+            celdas.get(posVieja).SacarObjetos();
+            celdas.get(robot.getPosicion()).AsignarObjeto(robot);
         }
 
     }
 
-    private void validarColisiones(Vector2 pos) {
-        if (celdas.get(pos).getObjeto() instanceof Jugador) {
-            System.out.println("Perdiste");
-        } else (if celdas.ge) {
-
+    public boolean Colisiones() {
+        var celdaJugador = celdas.get(player.getPosicion());
+        if (celdaJugador.EstaIncendiada() || celdaJugador.HayRobot()){
+            return true;
         }
+
+        for (Robot r : this.robots) {
+            var celdaRobot = celdas.get(r.getPosicion());
+            if (celdaRobot.EstaIncendiada() || celdaRobot.getObjeto().size() > 1) {
+                this.robots.removeAll(celdaRobot.SacarObjetos());
+                celdaRobot.Incendiar();
+            }
+        }
+
+        return false;
     }
 
-    private void reemplazarCelda(Vector2 posAntigua, Vector2 posNueva, Elemento objeto) {
+    public boolean HayPerdedor() {
+        return Colisiones();
+    }
+
+    public boolean HayGanador() {
+        return this.robots.isEmpty();
+    }
+
+
+
+    // El problema con el reemplazarCelda es que no hacemos todos los movimientos a la vez, entonces quizás dependiendo
+    // el orden se chocan robots que no necesariamente deberían chocarse si se mueven a la vez.
+    /*private void reemplazarCelda(Vector2 posAntigua, Vector2 posNueva, Elemento objeto) {
         celdas.get(posAntigua).SacarObjeto();
-        if (!celdas.get(posNueva).AsignarObjeto(objeto)) {
+        var nuevaCelda = celdas.get(posNueva);
+        if (!nuevaCelda.AsignarObjeto(objeto)) {
+            if (objeto instanceof Jugador || nuevaCelda.getObjeto() instanceof Jugador) {
+                // perdiste: te agarró un robot
+            } else {
 
+                nuevaCelda.Incendiar(posNueva);
+            }
         }
-    }
+    }*/
 }
