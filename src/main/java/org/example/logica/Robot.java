@@ -14,7 +14,6 @@ public abstract class Robot extends Elemento implements Movimiento {
         return tablero.esPosValida(posicion);
     }
 
-
     private Vector2 calcularPosicion(Vector2 posDeseada) {
         Vector2 vectorDireccion = posDeseada.restar(this.posicion);
         vectorDireccion.setX(Integer.compare(vectorDireccion.getX(), 0));

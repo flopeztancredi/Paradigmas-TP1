@@ -12,7 +12,7 @@ public class Tablero {
     private ArrayList<Robot> robots;
 
 
-    public Tablero(int filas, int columnas, Jugador player) {
+    public Tablero(int filas, int columnas) {
         this.filas = filas;
         this.columnas = columnas;
         inicializarJugador();
@@ -25,9 +25,29 @@ public class Tablero {
         }
     }
 
+    public int getPuntuacionJugador() {
+        return this.player.getPuntuación();
+    }
+
+    public int getFilas() {
+        return filas;
+    }
+
+    public int getColumnas() {
+        return columnas;
+    }
 
     public boolean esPosValida(Vector2 posicion) {
         return celdas.get(posicion).estaVacia();
+    }
+
+    public int sacarRobots(Elemento robot) {
+        this.robots.remove(robot);
+        if (robot instanceof R1) {
+            return 25;
+        } else {
+            return 50;
+        }
     }
 
 
@@ -40,9 +60,8 @@ public class Tablero {
         return posicion;
     }
 
-
     public void inicializarJugador() {
-        var pos = generarPosAleatoria();
+        var pos = new Vector2(this.columnas/2, this.filas/2);
         var jugador = new Jugador(pos);
         this.player = jugador;
         this.celdas.get(pos).asignarObjeto(jugador);
@@ -96,7 +115,7 @@ public class Tablero {
     public boolean moverJugador(Vector2 posicion) {
         player.Moverse(posicion);
         reemplazarCelda(player.getPosicion(), posicion);
-        return hayColision(player);
+        return !hayColision(player);
     }
 
 
@@ -116,14 +135,15 @@ public class Tablero {
     public boolean hayColision(Elemento elemento) {
         var celda = celdas.get(elemento.getPosicion());
         if (celda.estaVacia()) {
+            player.sumarPuntos(10);
             return false;
         }
 
         if (elemento instanceof Jugador) {
             // perdiste: te agarró un robot o pisaste fuego
         } else { // soy un robot
-            robots.remove(celda.sacarObjeto());
-            robots.remove(elemento);
+            player.sumarPuntos(sacarRobots(celda.sacarObjeto()));
+            player.sumarPuntos(sacarRobots(elemento));
             // incendiar celda
             celda.incendiar();
             // semanticamente habria que separar los casos donde el robot se chocó con otro robot y donde

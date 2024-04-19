@@ -1,5 +1,7 @@
 package org.example.logica;
 
+import java.util.Random;
+
 // 0 = der
 // 1 = upder
 // 2 = up
@@ -9,7 +11,6 @@ package org.example.logica;
 // 6 = dwn
 // 7 = dwnder
 // 8 = ran
-// 9 = safe
 
 public class Direccion {
     private int movimiento;
@@ -23,12 +24,9 @@ public class Direccion {
         var y = 0;
 
         if (this.movimiento == 8) {
-            // return vector random con filas, columnas
-        }
-        if (this.movimiento == 9) {
-            // este es mas complicado, podemos manejarlo desde el tablero también, pero tiene mas sentido hacerlo
-            // desde acá. quizas podemos randomizar hasta que haya una distancia hacia todos los robots mayor a...
-            // alguna cuenta con filas y columnas?
+            var rand = new Random();
+            var nuevaPos = new Vector2(rand.nextInt(filas), rand.nextInt(columnas));
+            return nuevaPos;
         }
 
         if (corroborarMovimiento(0, 1, 7, columnas-1, pos.getX())) {
@@ -59,4 +57,5 @@ public class Direccion {
     public int getMovimiento() {
         return movimiento;
     }
+
 }
