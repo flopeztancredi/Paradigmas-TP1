@@ -17,7 +17,7 @@ public class Tablero {
         this.columnas = columnas;
         inicializarJugador();
 
-        celdas = new HashMap<Vector2, Celda>();
+        celdas = new HashMap<>();
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
                 celdas.put(new Vector2(i, j), new Celda());
@@ -53,12 +53,14 @@ public class Tablero {
         for (int i = 0; i < r1; i++) {
             var pos = generarPosAleatoria();
             var robot1 = new R1(pos, this);
+            robots.add(robot1);
             celdas.get(pos).asignarObjeto(robot1);
         }
 
         for (int i = 0; i < r2; i++) {
             var pos = generarPosAleatoria();
             var robot2 = new R2(pos, this);
+            robots.add(robot2);
             celdas.get(pos).asignarObjeto(robot2);
         }
     }
