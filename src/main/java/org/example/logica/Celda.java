@@ -1,46 +1,44 @@
 package org.example.logica;
 
-import java.util.ArrayList;
-
 public class Celda {
-    private ArrayList<Elemento> objetos;
+    private Elemento elemento;
     private boolean incendiada = false;
 
-    public Celda(Elemento e) {
-        this.objetos = new ArrayList<>();
-        this.objetos.add(e);
-    }
     public Celda() {
-        this.objetos = new ArrayList<>();
+        this.elemento = null;
     }
 
-    public boolean AsignarObjeto(Elemento objeto) {
-        if (!EstaIncendiada()) {
-            this.objetos.add(objeto);
+    public boolean asignarObjeto(Elemento objeto) {
+        if (!estaVacia()) {
+            return false;
         }
-        return !EstaIncendiada();
+        this.elemento = objeto;
+        return true;
     }
 
-    public ArrayList<Elemento> SacarObjetos(){
-        var objetosSacados = this.objetos; // copia o referencia?
-        this.objetos.clear();
-        return objetosSacados;
-    };
-
-    public boolean EstaVacia() {return objetos.isEmpty();}
-
-    public boolean HayRobot() {
-        for (Elemento e : this.objetos) {
-            if (e instanceof Robot) {
-                return true;
-            }
-        }
-        return false;
+    public Elemento sacarObjeto() {
+        Elemento objeto = this.elemento;
+        this.elemento = null;
+        return objeto;
     }
 
-    public ArrayList<Elemento> getObjeto() { return objetos; }
+    public boolean estaVacia() {
+        return this.elemento == null;
+    }
 
-    public void Incendiar() { this.incendiada = true; }
+    public Elemento getElemento() {
+        return this.elemento;
+    }
 
-    public boolean EstaIncendiada() { return this.incendiada; }
+    public void incendiar() {
+        this.incendiada = true;
+    }
+
+    public void extinguirFuego() {
+        this.incendiada = false;
+    }
+
+    public boolean estaIncendiada() {
+        return this.incendiada;
+    }
 }

@@ -1,13 +1,11 @@
 package org.example.logica;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
-
 public class Tablero {
-    private HashMap<Vector2, Celda> celdas;
+    private final HashMap<Vector2, Celda> celdas;
     private final int filas;
     private final int columnas;
     private Jugador player;
@@ -27,15 +25,16 @@ public class Tablero {
         }
     }
 
-    public boolean esPosicionValida(Vector2 posNueva) {
-        return celdas.get(posNueva).EstaVacia();
+
+    public boolean esPosValida(Vector2 posicion) {
+        return celdas.get(posicion).estaVacia();
     }
 
 
-    public Vector2 posicionAleatoria() {
+    public Vector2 generarPosAleatoria() {
         var rand = new Random();
         Vector2 posicion = new Vector2(rand.nextInt(filas), rand.nextInt(columnas));
-        while (!esPosicionValida(posicion)) {
+        while (!esPosValida(posicion)) {
             posicion = new Vector2(rand.nextInt(filas), rand.nextInt(columnas));
         }
         return posicion;
@@ -43,110 +42,107 @@ public class Tablero {
 
 
     public void inicializarJugador() {
-        var pos = posicionAleatoria();
+        var pos = generarPosAleatoria();
         var jugador = new Jugador(pos);
-        celdas.replace(pos, new Celda(jugador));
         this.player = jugador;
+        this.celdas.get(pos).asignarObjeto(jugador);
     }
 
 
     public void inicializarRobots(int r1, int r2) {
         for (int i = 0; i < r1; i++) {
-            var pos = posicionAleatoria();
-            var robot1 = new R1(pos);
-            celdas.get(pos).AsignarObjeto(robot1);
+            var pos = generarPosAleatoria();
+            var robot1 = new R1(pos, this);
+            celdas.get(pos).asignarObjeto(robot1);
         }
 
         for (int i = 0; i < r2; i++) {
-            var pos = posicionAleatoria();
-            var robot2 = new R2(pos);
-            celdas.get(pos).AsignarObjeto(robot2);
+            var pos = generarPosAleatoria();
+            var robot2 = new R2(pos, this);
+            celdas.get(pos).asignarObjeto(robot2);
         }
     }
 
 
-    public void nuevoNivel(int robots1, int robots2) {
+    public void reiniciarTablero() {
+        for (HashMap.Entry<Vector2, Celda> entrada : celdas.entrySet()) {
+            var celda = entrada.getValue();
+            celda.sacarObjeto();
+            if (celda.estaIncendiada()) {
+                celda.extinguirFuego();
+            }
+        }
+        this.robots.clear();
+    }
+
+
+    public void inicializarNivel(int robots1, int robots2) {
+        reiniciarTablero();
         inicializarJugador();
         inicializarRobots(robots1, robots2);
     }
 
 
-    public void mover(Dirección dirección) {
+    public boolean mover(Direccion direccion) {
+        var posicion = direccion.dirigirMovimiento(player.getPosicion(), this.filas, this.columnas);
+        moverRobots(posicion);
+        return moverJugador(posicion);
+        // se tiene que mover al jugador desp de a los robots porque es el que se fija si se chocó con un robot
+    }
 
-        var posVieja = player.getPosicion();
-        var posNueva = dirección.DirigirMovimiento(posVieja, this.filas, this.columnas);
-        player.Moverse(posNueva);
-        if (!celdas.get(posNueva).AsignarObjeto(player)) {
-            // perdiste: te prendiste fuego.
-            // devolvemos un booleano acá o lo manejamos en colisiones?
-            // para mi lo mejor es manejarlo en colisiones, pero poniendolo aca te ahorras los movimientos
-            // de los robots
-        }
 
+    public boolean moverJugador(Vector2 posicion) {
+        player.Moverse(posicion);
+        reemplazarCelda(player.getPosicion(), posicion);
+        return hayColision(player);
+    }
+
+
+    public void moverRobots(Vector2 posicion) {
         for (Robot robot : robots) {
-            if (robot instanceof R2) {
-                robot.Moverse(posNueva);
+            celdas.get(robot.getPosicion()).sacarObjeto();
+            boolean movimientoValido = robot.Moverse(posicion);
+            if (movimientoValido) {
+                reemplazarCelda(robot.getPosicion(), posicion);
+            } else {
+                hayColision(robot);
             }
         }
-
-        // la superposicion de dos robots nunca va a pasar durante el movimiento -- siempre hay que
-        // chequearlo al final. Lo que si hay que chequear durante son los incendios. Tiene sentido que
-        // una celda entonces avise que hay que sacar un elemento cuando se asigna y esta esta incendiada.
-        // volver a poner para R1 y R2 los movimientos particulares?... si le encontramos la vuelta a
-        // saber que R2 piso una celda en el medio... quizas devolver como valor la que pisa, pero
-        // que Moverse() tenga que devolver algo para R2 y para R1 no, raro
-
-
-        for (Robot robot : robots) {
-            posVieja = robot.getPosicion();
-            robot.Moverse(posNueva);
-            celdas.get(posVieja).SacarObjetos();
-            if (!celdas.get(robot.getPosicion()).AsignarObjeto(robot)) {
-                robots.remove(robot);
-            }
-        }
-
     }
 
-    public boolean Colisiones() {
-        var celdaJugador = celdas.get(player.getPosicion());
-        if (celdaJugador.EstaIncendiada() || celdaJugador.HayRobot()){
-            return true;
+
+    public boolean hayColision(Elemento elemento) {
+        var celda = celdas.get(elemento.getPosicion());
+        if (celda.estaVacia()) {
+            return false;
         }
 
-        for (Robot r : this.robots) {
-            var celdaRobot = celdas.get(r.getPosicion());
-            if (celdaRobot.EstaIncendiada() || celdaRobot.getObjeto().size() > 1) {
-                this.robots.removeAll(celdaRobot.SacarObjetos());
-                celdaRobot.Incendiar();
-            }
+        if (elemento instanceof Jugador) {
+            // perdiste: te agarró un robot o pisaste fuego
+        } else { // soy un robot
+            robots.remove(celda.sacarObjeto());
+            robots.remove(elemento);
+            // incendiar celda
+            celda.incendiar();
+            // semanticamente habria que separar los casos donde el robot se chocó con otro robot y donde
+            // se chocó con un incendio, pero a nivel código no hay diferencia, solamente estamos llamando
+            // innecesariamente a incendiar.
         }
-
-        return false;
+        return true;
     }
 
-    public boolean HayPerdedor() {
-        return Colisiones();
-    }
 
-    public boolean HayGanador() {
+    public boolean hayGanador() {
         return this.robots.isEmpty();
     }
 
 
-
     // El problema con el reemplazarCelda es que no hacemos todos los movimientos a la vez, entonces quizás dependiendo
     // el orden se chocan robots que no necesariamente deberían chocarse si se mueven a la vez.
-    /*private void reemplazarCelda(Vector2 posAntigua, Vector2 posNueva, Elemento objeto) {
-        celdas.get(posAntigua).SacarObjeto();
-        var nuevaCelda = celdas.get(posNueva);
-        if (!nuevaCelda.AsignarObjeto(objeto)) {
-            if (objeto instanceof Jugador || nuevaCelda.getObjeto() instanceof Jugador) {
-                // perdiste: te agarró un robot
-            } else {
 
-                nuevaCelda.Incendiar(posNueva);
-            }
-        }
-    }*/
+    // ahora reemplazarCelda solo te reemplaza la celda, no se encarga de nada más. Las colisiones se verifican antes.
+    private void reemplazarCelda(Vector2 posAntigua, Vector2 posNueva) {
+        Elemento elem = celdas.get(posAntigua).sacarObjeto();
+        celdas.get(posNueva).asignarObjeto(elem);
+    }
 }

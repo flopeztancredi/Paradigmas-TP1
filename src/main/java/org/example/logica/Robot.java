@@ -1,30 +1,25 @@
 package org.example.logica;
 
 public abstract class Robot extends Elemento implements Movimiento {
-    public Robot(Vector2 posicion) {
+    private final Tablero tablero;
+
+    public Robot(Vector2 posicion, Tablero tablero) {
         super(posicion);
+        this.tablero = tablero;
     }
 
-    public void Moverse(Vector2 posicion) {
+    public boolean Moverse(Vector2 posicion) {
         var movimiento = calcularPosicion(posicion);
         this.posicion.sumar(movimiento);
+        return tablero.esPosValida(posicion);
     }
 
-    protected Vector2 calcularPosicion(Vector2 posDeseada) {
+
+    private Vector2 calcularPosicion(Vector2 posDeseada) {
         Vector2 vectorDireccion = posDeseada.restar(this.posicion);
-        if (vectorDireccion.getX() > 0) {
-            vectorDireccion.setX(1);
-        } else if (vectorDireccion.getX() < 0) {
-            vectorDireccion.setX(-1);
-        }
-
-        if (vectorDireccion.getY() > 0) {
-            vectorDireccion.setY(1);
-        } else if (vectorDireccion.getY() < 0) {
-            vectorDireccion.setY(-1);
-        }
-
+        vectorDireccion.setX(Integer.compare(vectorDireccion.getX(), 0));
+        vectorDireccion.setY(Integer.compare(vectorDireccion.getY(), 0));
         return vectorDireccion;
-    };
+    }
 
 }

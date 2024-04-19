@@ -11,14 +11,14 @@ package org.example.logica;
 // 8 = ran
 // 9 = safe
 
-public class Dirección {
+public class Direccion {
     private int movimiento;
 
-    public Dirección(int movimiento) {
+    public Direccion(int movimiento) {
         this.movimiento = movimiento;
     }
 
-    public Vector2 DirigirMovimiento(Vector2 pos, int filas, int columnas) {
+    public Vector2 dirigirMovimiento(Vector2 pos, int filas, int columnas) {
         var x = 0;
         var y = 0;
 
