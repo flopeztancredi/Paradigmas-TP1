@@ -1,4 +1,7 @@
-package org.example.logica;
+package org.robots.modelo.personajes;
+
+import org.robots.modelo.Tablero;
+import org.robots.modelo.herramientas.Vector2;
 
 public class R1 extends Robot {
 

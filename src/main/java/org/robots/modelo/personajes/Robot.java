@@ -1,4 +1,8 @@
-package org.example.logica;
+package org.robots.modelo.personajes;
+
+import org.robots.modelo.Movimiento;
+import org.robots.modelo.Tablero;
+import org.robots.modelo.herramientas.Vector2;
 
 public abstract class Robot extends Elemento implements Movimiento {
     private final Tablero tablero;

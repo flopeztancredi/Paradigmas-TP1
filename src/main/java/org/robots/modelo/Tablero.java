@@ -1,4 +1,8 @@
-package org.example.logica;
+package org.robots.modelo;
+
+import org.robots.modelo.herramientas.Direccion;
+import org.robots.modelo.herramientas.Vector2;
+import org.robots.modelo.personajes.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;

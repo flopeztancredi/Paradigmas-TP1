@@ -1,4 +1,6 @@
-package org.example.logica;
+package org.robots.modelo;
+
+import org.robots.modelo.personajes.Elemento;
 
 public class Celda {
     private Elemento elemento;

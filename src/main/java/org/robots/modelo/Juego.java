@@ -1,4 +1,6 @@
-package org.example.logica;
+package org.robots.modelo;
+
+import org.robots.modelo.herramientas.Direccion;
 
 public class Juego {
     private final Tablero tablero;

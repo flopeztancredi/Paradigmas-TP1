@@ -1,4 +1,7 @@
-package org.example.logica;
+package org.robots.modelo.personajes;
+
+import org.robots.modelo.Movimiento;
+import org.robots.modelo.herramientas.Vector2;
 
 public class Jugador extends Elemento implements Movimiento {
     private int puntuaciónPorMovimiento;

@@ -1,4 +1,4 @@
-package org.example.logica;
+package org.robots.modelo.herramientas;
 
 public class Vector2 {
     private int x;

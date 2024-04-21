@@ -1,4 +1,6 @@
-package org.example.logica;
+package org.robots.modelo.personajes;
+
+import org.robots.modelo.herramientas.Vector2;
 
 public class Elemento {
     protected Vector2 posicion;

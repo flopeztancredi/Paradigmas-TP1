@@ -1,4 +1,4 @@
-package org.example.logica;
+package org.robots.modelo.herramientas;
 
 import java.util.Random;
 
