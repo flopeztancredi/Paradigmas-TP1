@@ -6,5 +6,5 @@ module org.example {
     exports org.robots.controlador;
     exports org.robots;
 
-    opens org.robots.controlador to javafx.fxml;
+    opens org.robots.vista to javafx.fxml;
 }

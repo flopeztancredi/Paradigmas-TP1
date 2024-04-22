@@ -21,7 +21,7 @@ public class Jugador extends Elemento implements Movimiento {
         this.puntuaciónPorMovimiento += puntos;
     }
 
-    public int getPuntuación() {
+    public int getPuntuacion() {
         return puntuaciónPorMovimiento;
     }
 }

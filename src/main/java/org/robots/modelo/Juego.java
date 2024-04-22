@@ -14,7 +14,7 @@ public class Juego {
         this.puntuacion = 0;
     }
 
-    public void InicializarNivel() {
+    public void inicializarNivel() {
         var r1 = tablero.getFilas() * tablero.getColumnas() / 15 + this.nivel;
         var r2 = tablero.getFilas() * tablero.getColumnas() / 60 + this.nivel;
         tablero.inicializarNivel(r1, r2);
@@ -36,6 +36,12 @@ public class Juego {
         return 0;
     }
 
+    public int getFilas() {
+        return tablero.getFilas();
+    }
 
+    public int getColumnas() {
+        return tablero.getColumnas();
+    }
 
 }

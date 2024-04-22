@@ -19,18 +19,22 @@ public class Tablero {
     public Tablero(int filas, int columnas) {
         this.filas = filas;
         this.columnas = columnas;
-        inicializarJugador();
+        this.celdas = inicializarCeldas(filas, columnas);
+        this.player = inicializarJugador();
+    }
 
-        celdas = new HashMap<>();
+    private HashMap<Vector2, Celda> inicializarCeldas(int filas, int columnas) {
+        HashMap<Vector2, Celda> celdas = new HashMap<>();
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
                 celdas.put(new Vector2(i, j), new Celda());
             }
         }
+        return celdas;
     }
 
     public int getPuntuacionJugador() {
-        return this.player.getPuntuación();
+        return this.player.getPuntuacion();
     }
 
     public int getFilas() {
@@ -64,11 +68,11 @@ public class Tablero {
         return posicion;
     }
 
-    public void inicializarJugador() {
+    public Jugador inicializarJugador() {
         var pos = new Vector2(this.columnas/2, this.filas/2);
         var jugador = new Jugador(pos);
-        this.player = jugador;
-        this.celdas.get(pos).asignarObjeto(jugador);
+        celdas.get(pos).asignarObjeto(jugador);
+        return jugador;
     }
 
 
