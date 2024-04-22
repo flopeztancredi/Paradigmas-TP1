@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="pane" prefHeight="514.0" prefWidth="852.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <VBox alignment="CENTER" prefHeight="77.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Robots">
+                    <font>
+                    <Font name="System Bold" size="31.0" />
+                    </font>
+                </Text>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nivel: 1   Puntuación: 0" wrappingWidth="100.2734375">
+                    <font>
+                    <Font name="System Italic" size="10.0" />
+                    </font>
+                </Text>
+            </children>
+        </VBox>
+      <StackPane AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="77.0">
+         <children>
+            <GridPane fx:id="tablero" alignment="CENTER" gridLinesVisible="true">
+            </GridPane>
+         </children>
+      </StackPane>
+        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <children>
+                <Button mnemonicParsing="false" text="Teleport Randomly" />
+                <Button mnemonicParsing="false" text="Teleport Safely" />
+                <Button mnemonicParsing="false" text="Wait for Robots" />
+            </children>
+        </HBox>
+    </children>
+</AnchorPane>

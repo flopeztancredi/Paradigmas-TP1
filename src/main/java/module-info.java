@@ -1,4 +1,10 @@
 module org.example {
     requires javafx.controls;
-    exports org.robots.vista;
+    requires javafx.fxml;
+
+
+    exports org.robots.controlador;
+    exports org.robots;
+
+    opens org.robots.controlador to javafx.fxml;
 }
