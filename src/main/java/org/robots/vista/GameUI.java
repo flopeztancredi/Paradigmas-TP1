@@ -1,13 +1,18 @@
 package org.robots.vista;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.robots.modelo.Juego;
 
@@ -33,10 +38,17 @@ public class GameUI extends UI {
         dibujarTablero();
 
         gridTablero.setOnMouseClicked(e -> {
-            // esto calcula la celda seleccionada, pero no funciona al 100%.
-            // tenemos que ver como hacer para que le pegue siempre, o arreglarnoslas de otra forma (meterle handlers a TODOS los panes?)
-            int x = (int) (e.getX() / (gridTablero.getWidth() / juego.getColumnas()));
-            int y = (int) (e.getY() / (gridTablero.getHeight() / juego.getFilas()));
+            Node celda;
+            var source = (Node) e.getTarget();
+            if (source instanceof GridPane) {
+                return;
+            }
+            while (!(source instanceof Pane)) {
+                source = source.getParent();
+            }
+            celda = source;
+            var x = GridPane.getRowIndex(celda);
+            var y = GridPane.getColumnIndex(celda);
             juego.mover(x, y);
             dibujarTablero();
         });
@@ -83,11 +95,12 @@ public class GameUI extends UI {
         }
 
         for (var elemento : juego.getElementos()) {
-            Pane p = (Pane) gridTablero.getChildren().get(elemento.getX() + elemento.getY() * juego.getColumnas());
+            Pane p = (Pane) gridTablero.getChildren().get(elemento.getX() * juego.getColumnas() + elemento.getY());
             Label l = new Label(elemento.getNombre());
             l.setAlignment(javafx.geometry.Pos.CENTER);
             l.prefWidthProperty().bind(p.widthProperty());
             l.prefHeightProperty().bind(p.heightProperty());
+            l.setStyle("-fx-background-color: #FF8000");
             p.getChildren().add(l);
         }
     }

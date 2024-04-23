@@ -129,7 +129,16 @@ public class Tablero {
     }
 
 
-    public boolean mover(Vector2 posicion) {
+    public boolean mover(Vector2 posClickeada) {
+        var dirX = Integer.compare(posClickeada.getX(), this.player.getX());
+        if (dirX != 0) {
+            dirX = dirX / Math.abs(dirX);
+        } // feo tanto codigo, pero es la manera rapida que encontre que funcione
+        var dirY = Integer.compare(posClickeada.getY(), this.player.getY());
+        if (dirY != 0) {
+            dirY = dirY / Math.abs(dirY);
+        }
+        var posicion = this.player.getPosicion().sumar(new Vector2(dirX, dirY));
         moverRobots(posicion);
         return moverJugador(posicion);
         // se tiene que mover al jugador desp de a los robots porque es el que se fija si se chocó con un robot
