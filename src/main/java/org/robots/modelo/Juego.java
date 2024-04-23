@@ -1,6 +1,9 @@
 package org.robots.modelo;
 
-import org.robots.modelo.herramientas.Direccion;
+import org.robots.modelo.herramientas.Vector2;
+import org.robots.modelo.personajes.Elemento;
+
+import java.util.ArrayList;
 
 public class Juego {
     private final Tablero tablero;
@@ -15,8 +18,8 @@ public class Juego {
     }
 
     public void inicializarNivel() {
-        var r1 = tablero.getFilas() * tablero.getColumnas() / 15 + this.nivel;
-        var r2 = tablero.getFilas() * tablero.getColumnas() / 60 + this.nivel;
+        int r1 = tablero.getFilas() * tablero.getColumnas() / 15 + this.nivel;
+        int r2 = tablero.getFilas() * tablero.getColumnas() / 60 + this.nivel;
         tablero.inicializarNivel(r1, r2);
     }
 
@@ -24,9 +27,11 @@ public class Juego {
     // eso lo podríamos hacer en la parte de vista, o sea la App (que DirigirMovimiento() se haga ahí),
     // pero creo que queda feo
     // Tenemos que hacer que Mover() reciba siempre una posición, si no va a ser complicado
-    public int Mover(Direccion direccion) {
+    public int mover(int fila, int columna) {
+        System.out.println(fila + " " + columna);
         this.puntuacion += tablero.getPuntuacionJugador();
-        if (!tablero.mover(direccion)) {
+        Vector2 posicion = new Vector2(fila, columna);
+        if (!tablero.mover(posicion)) {
             return -1;
         } else if (tablero.hayGanador()) {
             this.puntuacion += 100;
@@ -42,6 +47,10 @@ public class Juego {
 
     public int getColumnas() {
         return tablero.getColumnas();
+    }
+
+    public ArrayList<Elemento> getElementos() {
+        return tablero.getElementos();
     }
 
 }

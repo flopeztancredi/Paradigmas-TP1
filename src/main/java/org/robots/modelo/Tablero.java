@@ -1,6 +1,5 @@
 package org.robots.modelo;
 
-import org.robots.modelo.herramientas.Direccion;
 import org.robots.modelo.herramientas.Vector2;
 import org.robots.modelo.personajes.*;
 
@@ -13,14 +12,14 @@ public class Tablero {
     private final int filas;
     private final int columnas;
     private Jugador player;
-    private ArrayList<Robot> robots;
+    private final ArrayList<Robot> robots;
 
 
     public Tablero(int filas, int columnas) {
         this.filas = filas;
         this.columnas = columnas;
         this.celdas = inicializarCeldas(filas, columnas);
-        this.player = inicializarJugador();
+        this.robots = new ArrayList<>();
     }
 
     private HashMap<Vector2, Celda> inicializarCeldas(int filas, int columnas) {
@@ -46,7 +45,12 @@ public class Tablero {
     }
 
     public boolean esPosValida(Vector2 posicion) {
-        return celdas.get(posicion).estaVacia();
+        for (var position : celdas.keySet()) {
+            if (position.getX() == posicion.getX() && position.getY() == posicion.getY()) {
+                return celdas.get(position).estaVacia();
+            }
+        }
+        return false;
     }
 
     public int sacarRobots(Elemento robot) {
@@ -68,11 +72,12 @@ public class Tablero {
         return posicion;
     }
 
-    public Jugador inicializarJugador() {
+    public void inicializarJugador() {
         var pos = new Vector2(this.columnas/2, this.filas/2);
         var jugador = new Jugador(pos);
-        celdas.get(pos).asignarObjeto(jugador);
-        return jugador;
+        this.player = jugador;
+        conseguirCelda(pos).asignarObjeto(jugador);
+        // celdas.get(pos).asignarObjeto(jugador);
     }
 
 
@@ -81,15 +86,27 @@ public class Tablero {
             var pos = generarPosAleatoria();
             var robot1 = new R1(pos, this);
             robots.add(robot1);
-            celdas.get(pos).asignarObjeto(robot1);
+            conseguirCelda(pos).asignarObjeto(robot1);
+            // celdas.get(pos).asignarObjeto(robot1);
         }
 
         for (int i = 0; i < r2; i++) {
             var pos = generarPosAleatoria();
             var robot2 = new R2(pos, this);
             robots.add(robot2);
-            celdas.get(pos).asignarObjeto(robot2);
+            conseguirCelda(pos).asignarObjeto(robot2);
+            // celdas.get(pos).asignarObjeto(robot2); esto no funciona porque pos es una nueva instancia de Vector2
         }
+    }
+
+    private Celda conseguirCelda(Vector2 posBuscada) {
+        for (HashMap.Entry<Vector2, Celda> entrada : celdas.entrySet()) {
+            var posicion = entrada.getKey();
+            if (posicion.getX() == posBuscada.getX() && posicion.getY() == posBuscada.getY()) {
+                return entrada.getValue();
+            }
+        }
+        return null;
     }
 
 
@@ -106,14 +123,13 @@ public class Tablero {
 
 
     public void inicializarNivel(int robots1, int robots2) {
-        reiniciarTablero();
+        // reiniciarTablero();
         inicializarJugador();
         inicializarRobots(robots1, robots2);
     }
 
 
-    public boolean mover(Direccion direccion) {
-        var posicion = direccion.dirigirMovimiento(player.getPosicion(), this.filas, this.columnas);
+    public boolean mover(Vector2 posicion) {
         moverRobots(posicion);
         return moverJugador(posicion);
         // se tiene que mover al jugador desp de a los robots porque es el que se fija si se chocó con un robot
@@ -129,7 +145,7 @@ public class Tablero {
 
     public void moverRobots(Vector2 posicion) {
         for (Robot robot : robots) {
-            celdas.get(robot.getPosicion()).sacarObjeto();
+            conseguirCelda(robot.getPosicion()).sacarObjeto();
             boolean movimientoValido = robot.Moverse(posicion);
             if (movimientoValido) {
                 reemplazarCelda(robot.getPosicion(), posicion);
@@ -141,7 +157,7 @@ public class Tablero {
 
 
     public boolean hayColision(Elemento elemento) {
-        var celda = celdas.get(elemento.getPosicion());
+        var celda = conseguirCelda(elemento.getPosicion());
         if (celda.estaVacia()) {
             player.sumarPuntos(10);
             return false;
@@ -172,7 +188,18 @@ public class Tablero {
 
     // ahora reemplazarCelda solo te reemplaza la celda, no se encarga de nada más. Las colisiones se verifican antes.
     private void reemplazarCelda(Vector2 posAntigua, Vector2 posNueva) {
-        Elemento elem = celdas.get(posAntigua).sacarObjeto();
-        celdas.get(posNueva).asignarObjeto(elem);
+        Elemento elem = conseguirCelda(posAntigua).sacarObjeto();
+        conseguirCelda(posNueva).asignarObjeto(elem);
+    }
+
+    public ArrayList<Elemento> getElementos() {
+        ArrayList<Elemento> elementos = new ArrayList<>();
+        for (HashMap.Entry<Vector2, Celda> entrada : celdas.entrySet()) {
+            var celda = entrada.getValue();
+            if (!celda.estaVacia()) {
+                elementos.add(celda.getElemento());
+            }
+        }
+        return elementos;
     }
 }

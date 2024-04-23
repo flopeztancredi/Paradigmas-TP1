@@ -8,7 +8,6 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import org.robots.modelo.Juego;
 
@@ -30,6 +29,17 @@ public class GameUI extends UI {
     public void iniciarJuego() throws IOException {
         Parent p = loadFXML("juego", this);
         iniciarTablero(juego.getFilas(), juego.getColumnas());
+        juego.inicializarNivel();
+        dibujarTablero();
+
+        gridTablero.setOnMouseClicked(e -> {
+            // esto calcula la celda seleccionada, pero no funciona al 100%.
+            // tenemos que ver como hacer para que le pegue siempre, o arreglarnoslas de otra forma (meterle handlers a TODOS los panes?)
+            int x = (int) (e.getX() / (gridTablero.getWidth() / juego.getColumnas()));
+            int y = (int) (e.getY() / (gridTablero.getHeight() / juego.getFilas()));
+            juego.mover(x, y);
+            dibujarTablero();
+        });
 
         Scene scene = new Scene(p, WIDTH, HEIGHT);
         stage.setScene(scene);
@@ -61,6 +71,24 @@ public class GameUI extends UI {
                 gridTablero.add(p, j, i);
             }
         }
+    }
 
+    private void dibujarTablero() {
+        // esto está horrible. basicamente borra tdo y vuelve a dibujar
+        for (int i = 0; i < juego.getFilas(); i++) {
+            for (int j = 0; j < juego.getColumnas(); j++) {
+                Pane p = (Pane) gridTablero.getChildren().get(j + i * juego.getColumnas());
+                p.getChildren().clear();
+            }
+        }
+
+        for (var elemento : juego.getElementos()) {
+            Pane p = (Pane) gridTablero.getChildren().get(elemento.getX() + elemento.getY() * juego.getColumnas());
+            Label l = new Label(elemento.getNombre());
+            l.setAlignment(javafx.geometry.Pos.CENTER);
+            l.prefWidthProperty().bind(p.widthProperty());
+            l.prefHeightProperty().bind(p.heightProperty());
+            p.getChildren().add(l);
+        }
     }
 }

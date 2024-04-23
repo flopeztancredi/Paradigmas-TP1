@@ -8,7 +8,7 @@ public abstract class Robot extends Elemento implements Movimiento {
     private final Tablero tablero;
 
     public Robot(Vector2 posicion, Tablero tablero) {
-        super(posicion);
+        super(posicion, "Robot");
         this.tablero = tablero;
     }
 
