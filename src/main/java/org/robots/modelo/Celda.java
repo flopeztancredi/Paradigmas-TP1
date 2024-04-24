@@ -1,10 +1,10 @@
 package org.robots.modelo;
 
 import org.robots.modelo.personajes.Elemento;
+import org.robots.modelo.personajes.Fuego;
 
 public class Celda {
     private Elemento elemento;
-    private boolean incendiada = false;
 
     public Celda() {
         this.elemento = null;
@@ -32,15 +32,17 @@ public class Celda {
         return this.elemento;
     }
 
-    public void incendiar() {
-        this.incendiada = true;
+    public void incendiar(Fuego fuego) {
+        this.elemento = fuego;
     }
 
     public void extinguirFuego() {
-        this.incendiada = false;
+        if (estaIncendiada()) {
+            this.elemento = null;
+        }
     }
 
     public boolean estaIncendiada() {
-        return this.incendiada;
+        return (this.elemento instanceof Fuego);
     }
 }

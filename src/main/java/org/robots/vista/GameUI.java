@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -13,6 +14,7 @@ import javafx.stage.Stage;
 import org.robots.modelo.Juego;
 
 import java.io.IOException;
+import java.util.Random;
 
 public class GameUI extends UI {
     private final Juego juego;
@@ -20,6 +22,17 @@ public class GameUI extends UI {
 
     @FXML
     private GridPane gridTablero;
+
+    @FXML
+    private Button random;
+
+    @FXML
+    private Button safe;
+
+    @FXML
+    private Button wait;
+
+
 
 
     public GameUI(Stage stage, Juego juego) {
@@ -45,7 +58,20 @@ public class GameUI extends UI {
             celda = source;
             var x = GridPane.getRowIndex(celda);
             var y = GridPane.getColumnIndex(celda);
-            juego.mover(x, y);
+            juego.moverHacia(x, y);
+            dibujarTablero();
+        });
+
+        random.setOnAction(e -> {
+            var rand = new Random();
+            juego.mover(rand.nextInt(juego.getColumnas()), rand.nextInt(juego.getColumnas()));
+            dibujarTablero();
+        });
+
+        // el safe??;
+
+        wait.setOnAction(e -> {
+            juego.quedarse();
             dibujarTablero();
         });
 
@@ -97,7 +123,13 @@ public class GameUI extends UI {
             l.setAlignment(javafx.geometry.Pos.CENTER);
             l.prefWidthProperty().bind(p.widthProperty());
             l.prefHeightProperty().bind(p.heightProperty());
-            l.setStyle("-fx-background-color: #FF8000");
+            if (l.getText().equals("Jugador")) {
+                l.setStyle("-fx-background-color: #F0F0F0");
+            } else if (l.getText().equals("Fuego")) {
+                l.setStyle("-fx-background-color: #777777");
+            } else {
+                l.setStyle("-fx-background-color: #FF8000");
+            }
             p.getChildren().add(l);
         }
     }

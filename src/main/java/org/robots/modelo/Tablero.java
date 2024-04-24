@@ -13,6 +13,7 @@ public class Tablero {
     private final int columnas;
     private Jugador player;
     private final ArrayList<Robot> robots;
+    private final ArrayList<Fuego> fuegos;
 
 
     public Tablero(int filas, int columnas) {
@@ -20,6 +21,7 @@ public class Tablero {
         this.columnas = columnas;
         this.celdas = inicializarCeldas(filas, columnas);
         this.robots = new ArrayList<>();
+        this.fuegos = new ArrayList<>();
     }
 
     private HashMap<Vector2, Celda> inicializarCeldas(int filas, int columnas) {
@@ -128,11 +130,19 @@ public class Tablero {
         inicializarRobots(robots1, robots2);
     }
 
+    public boolean quedarse() {
+        return mover(this.player.getPosicion());
+    }
 
-    public boolean mover(Vector2 posClickeada) {
+    public boolean moverHacia(Vector2 posClickeada) {
         posClickeada.setX(Integer.compare(posClickeada.getX(), this.player.getX()));
         posClickeada.setY(Integer.compare(posClickeada.getY(), this.player.getY()));
-        boolean jugadorMuerto = moverJugador(posClickeada);
+        var pos = new Vector2(this.player.getX()+posClickeada.getX(), this.player.getY()+posClickeada.getY());
+        return mover(pos);
+    }
+
+    public boolean mover(Vector2 pos) {
+        boolean jugadorMuerto = moverJugador(pos);
         if (jugadorMuerto) {
             // return false;
         }
@@ -168,9 +178,12 @@ public class Tablero {
             return false;
         }
 
-        player.sumarPuntos(sacarRobots(celda.sacarObjeto()));
+        var robot1 = celda.sacarObjeto(); // este puede ser un jugador! guarda con eso
+        player.sumarPuntos(sacarRobots(robot1));
         player.sumarPuntos(sacarRobots(elemento));
-        celda.incendiar();
+        var fuego = new Fuego(elemento.getPosicion());
+        celda.incendiar(fuego);
+        fuegos.add(fuego);
         return true;
     }
 
@@ -190,13 +203,9 @@ public class Tablero {
     }
 
     public ArrayList<Elemento> getElementos() {
-        ArrayList<Elemento> elementos = new ArrayList<>();
-        for (HashMap.Entry<Vector2, Celda> entrada : celdas.entrySet()) {
-            var celda = entrada.getValue();
-            if (!celda.estaVacia()) {
-                elementos.add(celda.getElemento());
-            }
-        }
+        ArrayList<Elemento> elementos = new ArrayList<>(this.robots);
+        elementos.add(this.player);
+        elementos.addAll(this.fuegos);
         return elementos;
     }
 }

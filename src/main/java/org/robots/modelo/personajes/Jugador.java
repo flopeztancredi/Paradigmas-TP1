@@ -12,7 +12,7 @@ public class Jugador extends Elemento implements Movimiento {
     }
 
     public boolean Moverse(Vector2 posicion) {
-        this.posicion.sumar(posicion);
+        this.posicion = posicion;
         puntuacionPorMovimiento = 0;
         return true;
     }

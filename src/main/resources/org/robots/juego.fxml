@@ -29,9 +29,9 @@
       </StackPane>
         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <children>
-                <Button contentDisplay="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="150.0" text="Teleport Randomly" />
-                <Button contentDisplay="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="150.0" text="Teleport Safely" />
-                <Button contentDisplay="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="150.0" text="Wait for Robots" />
+                <Button fx:id="random" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="150.0" text="Teleport Randomly" />
+                <Button fx:id="safe" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="150.0" text="Teleport Safely" />
+                <Button fx:id="wait" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="150.0" text="Wait for Robots" />
             </children>
         </HBox>
     </children>
