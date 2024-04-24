@@ -1,18 +1,14 @@
 package org.robots.vista;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Labeled;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.robots.modelo.Juego;
 
@@ -95,7 +91,8 @@ public class GameUI extends UI {
         }
 
         for (var elemento : juego.getElementos()) {
-            Pane p = (Pane) gridTablero.getChildren().get(elemento.getX() * juego.getColumnas() + elemento.getY());
+            System.out.println(elemento.getX() + " " + elemento.getY() + " " + elemento.getNombre());
+            Pane p = (Pane) gridTablero.getChildren().get(elemento.getY() + elemento.getX() * juego.getColumnas());
             Label l = new Label(elemento.getNombre());
             l.setAlignment(javafx.geometry.Pos.CENTER);
             l.prefWidthProperty().bind(p.widthProperty());

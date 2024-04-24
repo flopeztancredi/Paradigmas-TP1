@@ -18,8 +18,8 @@ public class Juego {
     }
 
     public void inicializarNivel() {
-        int r1 = tablero.getFilas() * tablero.getColumnas() / 15 + this.nivel;
-        int r2 = tablero.getFilas() * tablero.getColumnas() / 60 + this.nivel;
+        int r1 = tablero.getFilas() * tablero.getColumnas() / 30 + this.nivel;
+        int r2 = tablero.getFilas() * tablero.getColumnas() / 120 + this.nivel;
         tablero.inicializarNivel(r1, r2);
     }
 
@@ -28,16 +28,16 @@ public class Juego {
     // pero creo que queda feo
     // Tenemos que hacer que Mover() reciba siempre una posición, si no va a ser complicado
     public int mover(int fila, int columna) {
-        System.out.println(fila + " " + columna);
         this.puntuacion += tablero.getPuntuacionJugador();
         Vector2 posicion = new Vector2(fila, columna);
-        if (!tablero.mover(posicion)) {
-            return -1;
-        } else if (tablero.hayGanador()) {
-            this.puntuacion += 100;
-            this.nivel++;
-            return 1;
-        }
+        tablero.mover(posicion);
+//        if (!tablero.mover(posicion)) {
+//            return -1;
+//        } else if (tablero.hayGanador()) {
+//            this.puntuacion += 100;
+//            this.nivel++;
+//            return 1;
+//        }
         return 0;
     }
 

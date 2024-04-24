@@ -130,59 +130,47 @@ public class Tablero {
 
 
     public boolean mover(Vector2 posClickeada) {
-        var dirX = Integer.compare(posClickeada.getX(), this.player.getX());
-        if (dirX != 0) {
-            dirX = dirX / Math.abs(dirX);
-        } // feo tanto codigo, pero es la manera rapida que encontre que funcione
-        var dirY = Integer.compare(posClickeada.getY(), this.player.getY());
-        if (dirY != 0) {
-            dirY = dirY / Math.abs(dirY);
+        posClickeada.setX(Integer.compare(posClickeada.getX(), this.player.getX()));
+        posClickeada.setY(Integer.compare(posClickeada.getY(), this.player.getY()));
+        boolean jugadorMuerto = moverJugador(posClickeada);
+        if (jugadorMuerto) {
+            // return false;
         }
-        var posicion = this.player.getPosicion().sumar(new Vector2(dirX, dirY));
-        moverRobots(posicion);
-        return moverJugador(posicion);
-        // se tiene que mover al jugador desp de a los robots porque es el que se fija si se chocó con un robot
+        return moverRobots(player.getPosicion());
     }
 
 
-    public boolean moverJugador(Vector2 posicion) {
-        player.Moverse(posicion);
-        reemplazarCelda(player.getPosicion(), posicion);
-        return !hayColision(player);
+    public boolean moverJugador(Vector2 direccion) {
+        Vector2 posAntigua = new Vector2(player.getPosicion());
+        player.Moverse(direccion);
+        reemplazarCelda(posAntigua, player.getPosicion());
+        return hayColision(player);
     }
 
 
-    public void moverRobots(Vector2 posicion) {
+    public boolean moverRobots(Vector2 posJugador) {
         for (Robot robot : robots) {
-            conseguirCelda(robot.getPosicion()).sacarObjeto();
-            boolean movimientoValido = robot.Moverse(posicion);
-            if (movimientoValido) {
-                reemplazarCelda(robot.getPosicion(), posicion);
+            Vector2 posAntigua = new Vector2(robot.getPosicion());
+            if (robot.Moverse(posJugador)) {
+                reemplazarCelda(posAntigua, robot.getPosicion());
             } else {
-                hayColision(robot);
+                return !hayColision(robot);
             }
         }
+        return true;
     }
 
 
     public boolean hayColision(Elemento elemento) {
         var celda = conseguirCelda(elemento.getPosicion());
-        if (celda.estaVacia()) {
-            player.sumarPuntos(10);
+        if (celda.estaVacia() || elemento instanceof Jugador) {
+            // player.sumarPuntos(10);
             return false;
         }
 
-        if (elemento instanceof Jugador) {
-            // perdiste: te agarró un robot o pisaste fuego
-        } else { // soy un robot
-            player.sumarPuntos(sacarRobots(celda.sacarObjeto()));
-            player.sumarPuntos(sacarRobots(elemento));
-            // incendiar celda
-            celda.incendiar();
-            // semanticamente habria que separar los casos donde el robot se chocó con otro robot y donde
-            // se chocó con un incendio, pero a nivel código no hay diferencia, solamente estamos llamando
-            // innecesariamente a incendiar.
-        }
+        player.sumarPuntos(sacarRobots(celda.sacarObjeto()));
+        player.sumarPuntos(sacarRobots(elemento));
+        celda.incendiar();
         return true;
     }
 

@@ -9,6 +9,11 @@ public class Vector2 {
         this.y = y;
     }
 
+    public Vector2(Vector2 vector) {
+        this.x = vector.getX();
+        this.y = vector.getY();
+    }
+
     public int getX() {
         return x;
     }
@@ -25,11 +30,13 @@ public class Vector2 {
         this.y = y;
     }
 
-    public Vector2 sumar(Vector2 vector) {
-        return new Vector2(this.x + vector.getX(), this.y + vector.getY());
+    public void sumar(Vector2 vector) {
+        this.x += vector.getX();
+        this.y += vector.getY();
     }
 
-    public Vector2 restar(Vector2 vector) {
-        return new Vector2(this.x - vector.getX(), this.y - vector.getY());
+    public void restar(Vector2 vector) {
+        this.x -= vector.getX();
+        this.y -= vector.getY();
     }
 }
