@@ -128,14 +128,14 @@ public class Tablero {
     }
 
     private boolean moverJugador(Vector2 pos) {
-        if (!conseguirCelda(pos).estaVacia()) {
-            return false;
-        }
         Vector2 posAntigua = new Vector2(player.getPosicion());
-        player.moverse(pos);
         if (conseguirCelda(posAntigua).getElemento() instanceof Jugador) {
             conseguirCelda(posAntigua).sacarObjeto();
         }
+        if (!conseguirCelda(pos).estaVacia()) {
+            return false;
+        }
+        player.moverse(pos);
         conseguirCelda(pos).asignarObjeto(player);
         return true;
     }

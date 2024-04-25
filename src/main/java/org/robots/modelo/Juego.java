@@ -19,9 +19,9 @@ public class Juego {
     }
 
     public void inicializarNivel() {
-        // int r1 = tablero.getFilas() * tablero.getColumnas() / 30 + this.nivel;
-        // int r2 = tablero.getFilas() * tablero.getColumnas() / 120 + this.nivel;
-        tablero.inicializarNivel(1, 0);
+        // int r1 = tablero.getFilas() * tablero.getColumnas() / 30 + this.nivel-1;
+        // int r2 = tablero.getFilas() * tablero.getColumnas() / 120 + this.nivel-1;
+        tablero.inicializarNivel(3, 0);
     }
 
     public Estado mover(int fila, int columna) {
@@ -46,7 +46,7 @@ public class Juego {
             return Estado.PERDIDO;
         }
 
-        return tablero.esGanador() ? Estado.GANADO : Estado.JUGANDO;
+        return tablero.esGanador() ? Estado.GANADO : Estado.JUGANDO; // tira perdiste una vez cuando esta cerca?
     }
 
     public boolean activarTpSafe() {

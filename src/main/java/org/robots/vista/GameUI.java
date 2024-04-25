@@ -69,17 +69,14 @@ public class GameUI extends UI {
             } else {
                 estadoJuego = juego.moverHacia(x, y);
             }
-            if (estadoJuego == Estado.PERDIDO) {
-                System.out.println("Perdiste");
-            } else if (estadoJuego == Estado.GANADO) {
-                System.out.println("Ganaste");
-            }
+            corroborarEstado(estadoJuego);
             dibujarTablero();
         });
 
         random.setOnAction(e -> {
             var rand = new Random();
-            juego.mover(rand.nextInt(juego.getFilas()), rand.nextInt(juego.getColumnas()));
+            var estadoJuego = juego.mover(rand.nextInt(juego.getFilas()), rand.nextInt(juego.getColumnas()));
+            corroborarEstado(estadoJuego);
             dibujarTablero();
         });
 
@@ -90,13 +87,22 @@ public class GameUI extends UI {
         });
 
         wait.setOnAction(e -> {
-            juego.quedarse();
+            var estadoJuego = juego.quedarse();
+            corroborarEstado(estadoJuego);
             dibujarTablero();
         });
 
         Scene scene = new Scene(p, WIDTH, HEIGHT);
         stage.setScene(scene);
         stage.show();
+    }
+
+    private void corroborarEstado(Estado estadoJuego) {
+        if (estadoJuego == Estado.PERDIDO) {
+            System.out.println("Perdiste");
+        } else if (estadoJuego == Estado.GANADO) {
+            System.out.println("Ganaste");
+        }
     }
 
     private void disminuirTpSafe() {
