@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class Tablero {
-    private final HashMap<Vector2, Celda> celdas;
+    private final Celda[][] celdas;
     private final int filas;
     private final int columnas;
     private Jugador player;
@@ -24,11 +24,11 @@ public class Tablero {
         this.fuegos = new ArrayList<>();
     }
 
-    private HashMap<Vector2, Celda> inicializarCeldas(int filas, int columnas) {
-        HashMap<Vector2, Celda> celdas = new HashMap<>();
+    private Celda[][] inicializarCeldas(int filas, int columnas) {
+        Celda[][] celdas = new Celda[filas][columnas];
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
-                celdas.put(new Vector2(i, j), new Celda());
+                celdas[i][j] = new Celda();
             }
         }
         return celdas;
@@ -46,14 +46,9 @@ public class Tablero {
         return columnas;
     }
 
-    public boolean esPosValida(Vector2 posicion) {
-        for (var position : celdas.keySet()) {
-            if (position.getX() == posicion.getX() && position.getY() == posicion.getY()) {
-                return celdas.get(position).estaVacia();
-            }
-        }
-        return false;
-    }
+    public boolean esPosValida(Vector2 posicion) {return celdas[posicion.getX()][posicion.getY()].estaVacia();}
+
+    public boolean esPosIncendiada(Vector2 posicion) {return !celdas[posicion.getX()][posicion.getY()].estaIncendiada();}
 
     public int sacarRobots(Elemento robot) {
         this.robots.remove(robot);
@@ -79,7 +74,6 @@ public class Tablero {
         var jugador = new Jugador(pos);
         this.player = jugador;
         conseguirCelda(pos).asignarObjeto(jugador);
-        // celdas.get(pos).asignarObjeto(jugador);
     }
 
 
@@ -113,14 +107,13 @@ public class Tablero {
 
 
     public void reiniciarTablero() {
-        for (HashMap.Entry<Vector2, Celda> entrada : celdas.entrySet()) {
-            var celda = entrada.getValue();
-            celda.sacarObjeto();
-            if (celda.estaIncendiada()) {
-                celda.extinguirFuego();
+        for (var filaCeldas : celdas) {
+            for (var celda : filaCeldas) {
+                celda.sacarObjeto();
             }
         }
         this.robots.clear();
+        this.fuegos.clear();
     }
 
 
@@ -137,8 +130,8 @@ public class Tablero {
     public boolean moverHacia(Vector2 posClickeada) {
         posClickeada.setX(Integer.compare(posClickeada.getX(), this.player.getX()));
         posClickeada.setY(Integer.compare(posClickeada.getY(), this.player.getY()));
-        var pos = new Vector2(this.player.getX()+posClickeada.getX(), this.player.getY()+posClickeada.getY());
-        return mover(pos);
+        posClickeada.sumar(this.player.getPosicion());
+        return mover(posClickeada);
     }
 
     public boolean mover(Vector2 pos) {
@@ -150,43 +143,43 @@ public class Tablero {
     }
 
 
-    public boolean moverJugador(Vector2 direccion) {
-        Vector2 posAntigua = new Vector2(player.getPosicion());
-        player.Moverse(direccion);
-        reemplazarCelda(posAntigua, player.getPosicion());
-        return hayColision(player);
-    }
-
-
-    public boolean moverRobots(Vector2 posJugador) {
-        for (Robot robot : robots) {
-            Vector2 posAntigua = new Vector2(robot.getPosicion());
-            if (robot.Moverse(posJugador)) {
-                reemplazarCelda(posAntigua, robot.getPosicion());
-            } else {
-                return !hayColision(robot);
-            }
-        }
-        return true;
-    }
-
-
-    public boolean hayColision(Elemento elemento) {
-        var celda = conseguirCelda(elemento.getPosicion());
-        if (celda.estaVacia() || elemento instanceof Jugador) {
-            // player.sumarPuntos(10);
+    private boolean moverJugador(Vector2 pos) {
+        if (!(Objects.requireNonNull(conseguirCelda(pos)).estaVacia())) {
             return false;
         }
-
-        var robot1 = celda.sacarObjeto(); // este puede ser un jugador! guarda con eso
-        player.sumarPuntos(sacarRobots(robot1));
-        player.sumarPuntos(sacarRobots(elemento));
-        var fuego = new Fuego(elemento.getPosicion());
-        celda.incendiar(fuego);
-        fuegos.add(fuego);
+        Vector2 posAntigua = new Vector2(player.getPosicion());
+        player.moverse(pos);
+        reemplazarCelda(posAntigua, player.getPosicion());
         return true;
     }
 
+
+    private void moverRobots(Vector2 posJugador) {
+        for (var robot : robots) {
+            var posAntigua = new Vector2(robot.getPosicion());
+            conseguirCelda(posAntigua).sacarObjeto();
+            if (!(robot.moverse(posJugador))) {
+                sacarRobots(robot);
+            }
+        }
+        manejarColisiones();
+    }
+
+    private void manejarColision(Robot robot, Celda celda) {
+        var elemento = celda.sacarObjeto();
+        if (elemento instanceof Jugador) {
+            celda.asignarObjeto(robot);
+            return;
+        }
+
+        player.sumarPuntos(sacarRobots(robot));
+        if (elemento instanceof Robot) {
+            var fuego = new Fuego(robot.getPosicion());
+            celda.incendiar(fuego);
+            fuegos.add(fuego);
+            player.sumarPuntos(sacarRobots(elemento));
+        }
+    }
 
     public boolean hayGanador() {
         return this.robots.isEmpty();

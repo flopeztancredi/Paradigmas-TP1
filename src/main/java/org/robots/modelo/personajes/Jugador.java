@@ -11,7 +11,7 @@ public class Jugador extends Elemento implements Movimiento {
         puntuacionPorMovimiento = 0;
     }
 
-    public boolean Moverse(Vector2 posicion) {
+    public boolean moverse(Vector2 posicion) {
         this.posicion = posicion;
         puntuacionPorMovimiento = 0;
         return true;

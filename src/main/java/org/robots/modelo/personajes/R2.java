@@ -10,11 +10,11 @@ public class R2 extends Robot {
     }
 
     @Override
-    public boolean Moverse(Vector2 posJugador) {
-        if (!super.Moverse(posJugador)) {
+    public boolean moverse(Vector2 posJugador) {
+        if (!super.moverse(posJugador)) {
             return false;
         }
-        return super.Moverse(posJugador);
+        return super.moverse(posJugador);
     }
 
 }

@@ -64,7 +64,7 @@ public class GameUI extends UI {
             if (this.tpSafe) {
                 juego.mover(x, y);
                 this.tpSafe = false;
-                safe.setSelected(false);
+                disminuirTpSafe();
             } else {
                 juego.moverHacia(x, y);
             }
@@ -94,7 +94,12 @@ public class GameUI extends UI {
     }
 
     private void disminuirTpSafe() {
+        int cantidad = Integer.parseInt(cantTpSafe.getText()) - 1;
+        cantTpSafe.setText(Integer.toString(cantidad));
 
+        if (cantidad == 0) {
+            safe.setDisable(true);
+        }
     }
 
     private void iniciarTablero(int filas, int columnas) {
