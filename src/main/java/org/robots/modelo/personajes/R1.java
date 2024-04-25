@@ -6,7 +6,7 @@ import org.robots.modelo.herramientas.Vector2;
 public class R1 extends Robot {
 
     public R1(Vector2 posicion, Tablero tablero) {
-        super(posicion, tablero, "R1");
+        super(posicion, tablero, "R1", 25);
     }
 
 }

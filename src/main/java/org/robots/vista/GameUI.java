@@ -12,6 +12,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
+import org.robots.modelo.Estado;
 import org.robots.modelo.Juego;
 
 import java.io.IOException;
@@ -61,12 +62,17 @@ public class GameUI extends UI {
             celda = source;
             var x = GridPane.getRowIndex(celda);
             var y = GridPane.getColumnIndex(celda);
+            Estado estadoJuego;
             if (this.tpSafe) {
-                juego.mover(x, y);
-                this.tpSafe = false;
+                estadoJuego = juego.mover(x, y);
                 disminuirTpSafe();
             } else {
-                juego.moverHacia(x, y);
+                estadoJuego = juego.moverHacia(x, y);
+            }
+            if (estadoJuego == Estado.PERDIDO) {
+                System.out.println("Perdiste");
+            } else if (estadoJuego == Estado.GANADO) {
+                System.out.println("Ganaste");
             }
             dibujarTablero();
         });
@@ -94,6 +100,7 @@ public class GameUI extends UI {
     }
 
     private void disminuirTpSafe() {
+        this.tpSafe = false;
         int cantidad = Integer.parseInt(cantTpSafe.getText()) - 1;
         cantTpSafe.setText(Integer.toString(cantidad));
 
@@ -139,7 +146,6 @@ public class GameUI extends UI {
         }
 
         for (var elemento : juego.getElementos()) {
-            System.out.println(elemento.getX() + " " + elemento.getY() + " " + elemento.getNombre());
             Pane p = (Pane) gridTablero.getChildren().get(elemento.getY() + elemento.getX() * juego.getColumnas());
             Label l = new Label(elemento.getNombre());
             l.setAlignment(javafx.geometry.Pos.CENTER);

@@ -21,25 +21,32 @@ public class Juego {
     public void inicializarNivel() {
         // int r1 = tablero.getFilas() * tablero.getColumnas() / 30 + this.nivel;
         // int r2 = tablero.getFilas() * tablero.getColumnas() / 120 + this.nivel;
-        tablero.inicializarNivel(2, 0);
+        tablero.inicializarNivel(1, 0);
     }
 
-    // Para moverse seguro?? como hariamos? Habría que pasar una posición acá directamente, no una dirección
-    // eso lo podríamos hacer en la parte de vista, o sea la App (que DirigirMovimiento() se haga ahí),
-    // pero creo que queda feo
-    // Tenemos que hacer que Mover() reciba siempre una posición, si no va a ser complicado
-    public int moverHacia(int fila, int columna) {
+    public Estado mover(int fila, int columna) {
+        boolean sigueJugando = tablero.mover(new Vector2(fila, columna));
+        return definirEstado(sigueJugando);
+    }
+
+    public Estado moverHacia(int fila, int columna) {
         this.puntuacion += tablero.getPuntuacionJugador();
         Vector2 posicion = new Vector2(fila, columna);
-        tablero.moverHacia(posicion);
-//        if (!tablero.mover(posicion)) {
-//            return -1;
-//        } else if (tablero.hayGanador()) {
-//            this.puntuacion += 100;
-//            this.nivel++;
-//            return 1;
-//        }
-        return 0;
+        boolean sigueJugando = tablero.moverHacia(posicion);
+        return definirEstado(sigueJugando);
+    }
+
+    public Estado quedarse() {
+        boolean sigueJugando = tablero.quedarse();
+        return definirEstado(sigueJugando);
+    }
+
+    private Estado definirEstado(boolean sigueJugando) {
+        if (!sigueJugando) {
+            return Estado.PERDIDO;
+        }
+
+        return tablero.esGanador() ? Estado.GANADO : Estado.JUGANDO;
     }
 
     public boolean activarTpSafe() {
@@ -48,16 +55,6 @@ public class Juego {
         }
         this.tpSafe--;
         return true;
-    }
-
-    public int mover(int fila, int columna) {
-        tablero.mover(new Vector2(fila, columna));
-        return 0;
-    }
-
-    public int quedarse() {
-        tablero.quedarse();
-        return 0;
     }
 
     public int getFilas() {
