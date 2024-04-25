@@ -9,6 +9,7 @@ public class Juego {
     private final Tablero tablero;
     private int nivel;
     private int puntuacion;
+    private int tpSafe = 1;
 
 
     public Juego(int filas, int columnas) {
@@ -41,6 +42,14 @@ public class Juego {
         return 0;
     }
 
+    public boolean activarTpSafe() {
+        if (this.tpSafe <= 0) {
+            return false;
+        }
+        this.tpSafe--;
+        return true;
+    }
+
     public int mover(int fila, int columna) {
         tablero.mover(new Vector2(fila, columna));
         return 0;
@@ -61,6 +70,10 @@ public class Juego {
 
     public ArrayList<Elemento> getElementos() {
         return tablero.getElementos();
+    }
+
+    public int getTpSafe() {
+        return this.tpSafe;
     }
 
 }

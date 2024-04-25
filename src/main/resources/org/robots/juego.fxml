@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.ToggleButton?>
 <AnchorPane fx:id="pane" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <VBox alignment="CENTER" prefHeight="77.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -30,7 +31,14 @@
         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <children>
                 <Button fx:id="random" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="150.0" text="Teleport Randomly" />
-                <Button fx:id="safe" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="150.0" text="Teleport Safely" />
+                <ToggleButton fx:id="safe" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="150.0" text="Teleport Safely">
+               <graphic>
+                  <Label fx:id="cantTpSafe" alignment="BOTTOM_CENTER" prefHeight="39.0" prefWidth="150.0" text="Remaining: 1 ">
+                     <font>
+                        <Font size="9.0" />
+                     </font>
+                  </Label>
+               </graphic></ToggleButton>
                 <Button fx:id="wait" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="150.0" text="Wait for Robots" />
             </children>
         </HBox>

@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -19,6 +20,7 @@ import java.util.Random;
 public class GameUI extends UI {
     private final Juego juego;
     private final Stage stage;
+    private boolean tpSafe = false;
 
     @FXML
     private GridPane gridTablero;
@@ -27,12 +29,13 @@ public class GameUI extends UI {
     private Button random;
 
     @FXML
-    private Button safe;
+    private ToggleButton safe;
 
     @FXML
     private Button wait;
 
-
+    @FXML
+    private Label cantTpSafe;
 
 
     public GameUI(Stage stage, Juego juego) {
@@ -58,7 +61,13 @@ public class GameUI extends UI {
             celda = source;
             var x = GridPane.getRowIndex(celda);
             var y = GridPane.getColumnIndex(celda);
-            juego.moverHacia(x, y);
+            if (this.tpSafe) {
+                juego.mover(x, y);
+                this.tpSafe = false;
+                safe.setSelected(false);
+            } else {
+                juego.moverHacia(x, y);
+            }
             dibujarTablero();
         });
 
@@ -68,7 +77,11 @@ public class GameUI extends UI {
             dibujarTablero();
         });
 
-        // el safe??;
+        safe.setOnAction(actionEvent -> {
+            if (juego.activarTpSafe()) {
+                this.tpSafe = true;
+            }
+        });
 
         wait.setOnAction(e -> {
             juego.quedarse();
@@ -78,6 +91,10 @@ public class GameUI extends UI {
         Scene scene = new Scene(p, WIDTH, HEIGHT);
         stage.setScene(scene);
         stage.show();
+    }
+
+    private void disminuirTpSafe() {
+
     }
 
     private void iniciarTablero(int filas, int columnas) {
