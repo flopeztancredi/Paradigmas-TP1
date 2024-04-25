@@ -15,7 +15,7 @@ public abstract class Robot extends Elemento implements Movimiento {
     public boolean moverse(Vector2 posJugador) {
         var movimiento = calcularPosicion(posJugador);
         this.posicion.sumar(movimiento);
-        return tablero.esPosValida(this.posicion);
+        return !tablero.esPosIncendiada(this.posicion);
     }
 
     private Vector2 calcularPosicion(Vector2 posDeseada) {

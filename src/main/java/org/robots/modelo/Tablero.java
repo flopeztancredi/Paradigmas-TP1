@@ -5,6 +5,7 @@ import org.robots.modelo.personajes.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Random;
 
 public class Tablero {
@@ -48,7 +49,7 @@ public class Tablero {
 
     public boolean esPosValida(Vector2 posicion) {return celdas[posicion.getX()][posicion.getY()].estaVacia();}
 
-    public boolean esPosIncendiada(Vector2 posicion) {return !celdas[posicion.getX()][posicion.getY()].estaIncendiada();}
+    public boolean esPosIncendiada(Vector2 posicion) {return celdas[posicion.getX()][posicion.getY()].estaIncendiada();}
 
     public int sacarRobots(Elemento robot) {
         this.robots.remove(robot);
@@ -58,7 +59,6 @@ public class Tablero {
             return 50;
         }
     }
-
 
     public Vector2 generarPosAleatoria() {
         var rand = new Random();
@@ -70,7 +70,7 @@ public class Tablero {
     }
 
     public void inicializarJugador() {
-        var pos = new Vector2(this.columnas/2, this.filas/2);
+        var pos = new Vector2(this.filas/2, this.columnas/2);
         var jugador = new Jugador(pos);
         this.player = jugador;
         conseguirCelda(pos).asignarObjeto(jugador);
@@ -95,15 +95,7 @@ public class Tablero {
         }
     }
 
-    private Celda conseguirCelda(Vector2 posBuscada) {
-        for (HashMap.Entry<Vector2, Celda> entrada : celdas.entrySet()) {
-            var posicion = entrada.getKey();
-            if (posicion.getX() == posBuscada.getX() && posicion.getY() == posBuscada.getY()) {
-                return entrada.getValue();
-            }
-        }
-        return null;
-    }
+    private Celda conseguirCelda(Vector2 posBuscada) { return celdas[posBuscada.getX()][posBuscada.getY()]; }
 
 
     public void reiniciarTablero() {
@@ -116,16 +108,13 @@ public class Tablero {
         this.fuegos.clear();
     }
 
-
     public void inicializarNivel(int robots1, int robots2) {
         // reiniciarTablero();
         inicializarJugador();
         inicializarRobots(robots1, robots2);
     }
 
-    public boolean quedarse() {
-        return mover(this.player.getPosicion());
-    }
+    public boolean quedarse() { return mover(this.player.getPosicion()); }
 
     public boolean moverHacia(Vector2 posClickeada) {
         posClickeada.setX(Integer.compare(posClickeada.getX(), this.player.getX()));
@@ -135,13 +124,9 @@ public class Tablero {
     }
 
     public boolean mover(Vector2 pos) {
-        boolean jugadorMuerto = moverJugador(pos);
-        if (jugadorMuerto) {
-            // return false;
-        }
-        return moverRobots(player.getPosicion());
+        moverRobots(pos);
+        return moverJugador(pos);
     }
-
 
     private boolean moverJugador(Vector2 pos) {
         if (!(Objects.requireNonNull(conseguirCelda(pos)).estaVacia())) {
@@ -157,7 +142,7 @@ public class Tablero {
     private void moverRobots(Vector2 posJugador) {
         for (var robot : robots) {
             var posAntigua = new Vector2(robot.getPosicion());
-            conseguirCelda(posAntigua).sacarObjeto();
+            Objects.requireNonNull(conseguirCelda(posAntigua)).sacarObjeto();
             if (!(robot.moverse(posJugador))) {
                 sacarRobots(robot);
             }
@@ -165,31 +150,33 @@ public class Tablero {
         manejarColisiones();
     }
 
-    private void manejarColision(Robot robot, Celda celda) {
-        var elemento = celda.sacarObjeto();
+    private void manejarColisiones() {
+        for (var robot: robots) { // se rompe cuando se chocan, creo que es algo del for
+            var celdaParaMoverse = conseguirCelda(robot.getPosicion());
+            if (celdaParaMoverse.estaVacia()) {
+                celdaParaMoverse.asignarObjeto(robot);
+            } else {
+                manejarColision(robot, celdaParaMoverse);
+            }
+        }
+    }
+
+    private void manejarColision(Robot robot, Celda celdaParaMoverse) {
+        var elemento = celdaParaMoverse.sacarObjeto();
         if (elemento instanceof Jugador) {
-            celda.asignarObjeto(robot);
+            celdaParaMoverse.asignarObjeto(robot);
             return;
-        }
+        } // si no, me choco contra un robot
 
+        var fuego = new Fuego(robot.getPosicion());
+        celdaParaMoverse.incendiar(fuego);
+        fuegos.add(fuego);
         player.sumarPuntos(sacarRobots(robot));
-        if (elemento instanceof Robot) {
-            var fuego = new Fuego(robot.getPosicion());
-            celda.incendiar(fuego);
-            fuegos.add(fuego);
-            player.sumarPuntos(sacarRobots(elemento));
-        }
+        player.sumarPuntos(sacarRobots(elemento));
     }
 
-    public boolean hayGanador() {
-        return this.robots.isEmpty();
-    }
+    public boolean hayGanador() { return this.robots.isEmpty(); }
 
-
-    // El problema con el reemplazarCelda es que no hacemos todos los movimientos a la vez, entonces quizás dependiendo
-    // el orden se chocan robots que no necesariamente deberían chocarse si se mueven a la vez.
-
-    // ahora reemplazarCelda solo te reemplaza la celda, no se encarga de nada más. Las colisiones se verifican antes.
     private void reemplazarCelda(Vector2 posAntigua, Vector2 posNueva) {
         Elemento elem = conseguirCelda(posAntigua).sacarObjeto();
         conseguirCelda(posNueva).asignarObjeto(elem);

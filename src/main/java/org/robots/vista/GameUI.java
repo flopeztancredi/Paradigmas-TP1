@@ -73,7 +73,7 @@ public class GameUI extends UI {
 
         random.setOnAction(e -> {
             var rand = new Random();
-            juego.mover(rand.nextInt(juego.getColumnas()), rand.nextInt(juego.getColumnas()));
+            juego.mover(rand.nextInt(juego.getFilas()), rand.nextInt(juego.getColumnas()));
             dibujarTablero();
         });
 
