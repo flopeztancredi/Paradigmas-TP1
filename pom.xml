@@ -15,6 +15,11 @@
             <artifactId>javafx-controls</artifactId>
             <version>22</version>
         </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>22</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -36,7 +41,7 @@
                         <!-- Usage: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>org.example.vista.App</mainClass>
+                            <mainClass>org.robots.Main</mainClass>
                         </configuration>
                     </execution>
                 </executions>
