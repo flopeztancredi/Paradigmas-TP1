@@ -13,7 +13,6 @@ public class Jugador extends Elemento implements Movimiento {
 
     public boolean moverse(Vector2 posicion) {
         this.posicion = posicion;
-        puntuacionPorMovimiento = 0;
         return true;
     }
 
@@ -22,6 +21,8 @@ public class Jugador extends Elemento implements Movimiento {
     }
 
     public int getPuntuacion() {
-        return puntuacionPorMovimiento;
+        var pts = this.puntuacionPorMovimiento;
+        this.puntuacionPorMovimiento = 0;
+        return pts;
     }
 }
