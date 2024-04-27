@@ -1,5 +1,7 @@
 package org.robots.vista;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -26,26 +28,24 @@ public class MenuUI extends UI {
     public MenuUI(Stage stage) throws IOException {
         this.stage = stage;
         this.parent = loadFXML("menu", this);
-
-        btnJugar.setOnAction(e -> {
-            try {
-                iniciarJuego();
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
-        });
     }
 
     public void mostrar() {
-        Scene scene = new Scene(parent, WIDTH, HEIGHT);
+        Scene scene = new Scene(parent, super.getWIDTH(), super.getHEIGHT());
         stage.setScene(scene);
         stage.show();
     }
 
-    private void iniciarJuego() throws IOException {
-        int filas = Integer.parseInt(txtFilas.getText());
-        int columnas = Integer.parseInt(txtColumnas.getText());
-        var gameUI = new GameUI(stage, new Juego(filas, columnas));
-        gameUI.iniciarJuego();
+    public void agregarHandler(EventHandler<ActionEvent> handler) {
+        btnJugar.setOnAction(handler);
     }
+
+    public int getFilas() {
+        return Integer.parseInt(txtFilas.getText());
+    }
+
+    public int getColumnas() {
+        return Integer.parseInt(txtColumnas.getText());
+    }
+
 }

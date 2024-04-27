@@ -47,17 +47,11 @@ public class Tablero {
 
     /* Validaciones */
 
-    public boolean esPosValida(Vector2 posicion) {
-        return celdas[posicion.getX()][posicion.getY()].estaVacia();
-    }
+    public boolean esPosValida(Vector2 posicion) { return celdas[posicion.getX()][posicion.getY()].estaVacia(); }
 
-    public boolean esPosIncendiada(Vector2 posicion) {
-        return celdas[posicion.getX()][posicion.getY()].estaIncendiada();
-    }
+    public boolean esPosIncendiada(Vector2 posicion) { return celdas[posicion.getX()][posicion.getY()].estaIncendiada(); }
 
-    public boolean esGanador() {
-        return this.robots.isEmpty();
-    }
+    public boolean esGanador() { return this.robots.isEmpty(); }
 
     /* Inicializaciones */
 
@@ -116,9 +110,7 @@ public class Tablero {
         return moverJugador(pos);
     }
 
-    public boolean quedarse() {
-        return mover(this.player.getPosicion());
-    }
+    public boolean quedarse() { return mover(this.player.getPosicion()); }
 
     public boolean moverHacia(Vector2 posClickeada) {
         posClickeada.setX(Integer.compare(posClickeada.getX(), this.player.getX()));
@@ -129,7 +121,7 @@ public class Tablero {
 
     private boolean moverJugador(Vector2 pos) {
         Vector2 posAntigua = new Vector2(player.getPosicion());
-        if (conseguirCelda(posAntigua).getElemento() instanceof Jugador) {
+        if (conseguirCelda(posAntigua).getElemento().esJugador()) {
             conseguirCelda(posAntigua).sacarObjeto();
         }
         if (!conseguirCelda(pos).estaVacia()) {
@@ -137,7 +129,6 @@ public class Tablero {
         }
         player.moverse(pos);
         conseguirCelda(pos).asignarObjeto(player);
-        player.sumarPuntos(10);
         return true;
     }
 
@@ -167,15 +158,14 @@ public class Tablero {
     // manejarColision con polimorfismo te extrañamos
 
     private void manejarColision(Robot robot, Celda celdaParaMoverse) {
-        // por ahora queda con instanceof
         var elemento = celdaParaMoverse.sacarObjeto();
-        if (elemento instanceof Jugador) {
+        if (elemento.esJugador()) {
             celdaParaMoverse.asignarObjeto(robot);
             return;
-        } // si no es un jugador, es un Robot o Fuego
+        }
 
         player.sumarPuntos(sacarRobots(robot));
-        if (elemento instanceof Fuego) {
+        if (elemento.esFuego()) {
             celdaParaMoverse.asignarObjeto(elemento);
             return;
         }
@@ -192,7 +182,7 @@ public class Tablero {
         return robot.getPuntuacion();
     }
 
-    private Vector2 generarPosAleatoria() {
+    public Vector2 generarPosAleatoria() {
         var rand = new Random();
         Vector2 posicion = new Vector2(rand.nextInt(filas), rand.nextInt(columnas));
         while (!esPosValida(posicion)) {

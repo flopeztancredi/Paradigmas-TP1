@@ -26,4 +26,16 @@ public class Elemento {
     public String getNombre() {
         return nombre;
     }
+
+    public boolean esJugador() {
+        return this instanceof Jugador;
+    }
+
+    public boolean esRobot() {
+        return this instanceof Robot;
+    }
+
+    public boolean esFuego() {
+        return this instanceof Fuego;
+    }
 }
