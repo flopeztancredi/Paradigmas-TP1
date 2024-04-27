@@ -94,17 +94,17 @@ public class Tablero {
     }
 
     private void reiniciarTablero() {
-        for (var filaCeldas : celdas) {
-            for (var celda : filaCeldas) {
-                celda.sacarObjeto();
-            }
+        for (Fuego f : fuegos) {
+            conseguirCelda(f.getPosicion()).sacarObjeto();
         }
-        this.robots.clear();
         this.fuegos.clear();
+        if (this.player != null) {
+            conseguirCelda(this.player.getPosicion()).sacarObjeto();
+        }
     }
 
-    public void inicializarNivel(int robots1, int robots2) {
-        // reiniciarTablero();
+    public void siguienteNivel(int robots1, int robots2) {
+        reiniciarTablero();
         inicializarJugador();
         inicializarRobots(robots1, robots2);
     }
@@ -137,6 +137,7 @@ public class Tablero {
         }
         player.moverse(pos);
         conseguirCelda(pos).asignarObjeto(player);
+        player.sumarPuntos(10);
         return true;
     }
 
@@ -205,10 +206,5 @@ public class Tablero {
             throw new IllegalArgumentException("Posicion invalida");
         }
         return this.celdas[posBuscada.getX()][posBuscada.getY()];
-    }
-
-    private void reemplazarCelda(Vector2 posAntigua, Vector2 posNueva) {
-        Elemento elem = conseguirCelda(posAntigua).sacarObjeto();
-        conseguirCelda(posNueva).asignarObjeto(elem);
     }
 }

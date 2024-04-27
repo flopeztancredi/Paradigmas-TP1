@@ -1,12 +1,11 @@
 package org.robots.vista;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -16,12 +15,17 @@ import org.robots.modelo.Estado;
 import org.robots.modelo.Juego;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Random;
 
 public class GameUI extends UI {
     private final Juego juego;
     private final Stage stage;
     private boolean tpSafe = false;
+
+    private final int AUMENTAR = 1;
+    private final int DISMINUIR = -1;
 
     @FXML
     private GridPane gridTablero;
@@ -38,6 +42,12 @@ public class GameUI extends UI {
     @FXML
     private Label cantTpSafe;
 
+    @FXML
+    private Label nivel;
+
+    @FXML
+    private Label points;
+
 
     public GameUI(Stage stage, Juego juego) {
         this.juego = juego;
@@ -47,7 +57,7 @@ public class GameUI extends UI {
     public void iniciarJuego() throws IOException {
         Parent p = loadFXML("juego", this);
         iniciarTablero(juego.getFilas(), juego.getColumnas());
-        juego.inicializarNivel();
+        juego.siguienteNivel();
         dibujarTablero();
 
         gridTablero.setOnMouseClicked(e -> {
@@ -65,18 +75,28 @@ public class GameUI extends UI {
             Estado estadoJuego;
             if (this.tpSafe) {
                 estadoJuego = juego.mover(x, y);
-                disminuirTpSafe();
+                cambiarTpSafe(DISMINUIR);
+                safe.setSelected(false);
+                this.tpSafe = false;
             } else {
                 estadoJuego = juego.moverHacia(x, y);
             }
-            corroborarEstado(estadoJuego);
+            try {
+                corroborarEstado(estadoJuego);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
             dibujarTablero();
         });
 
         random.setOnAction(e -> {
             var rand = new Random();
             var estadoJuego = juego.mover(rand.nextInt(juego.getFilas()), rand.nextInt(juego.getColumnas()));
-            corroborarEstado(estadoJuego);
+            try {
+                corroborarEstado(estadoJuego);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
             dibujarTablero();
         });
 
@@ -88,7 +108,11 @@ public class GameUI extends UI {
 
         wait.setOnAction(e -> {
             var estadoJuego = juego.quedarse();
-            corroborarEstado(estadoJuego);
+            try {
+                corroborarEstado(estadoJuego);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
             dibujarTablero();
         });
 
@@ -97,21 +121,50 @@ public class GameUI extends UI {
         stage.show();
     }
 
-    private void corroborarEstado(Estado estadoJuego) {
+    private void actualizarValores() {
+        nivel.setText(String.valueOf(juego.getNivel()));
+        points.setText(String.valueOf(juego.getPuntuacion()));
+    }
+
+    private void corroborarEstado(Estado estadoJuego) throws IOException {
+        if (estadoJuego == Estado.JUGANDO) return;
+
+        String estadoNivel = " ";
+        var reiniciar = new ButtonType("Volver al menu");
+        var salir = new ButtonType("Salir");
+        ArrayList<ButtonType> b = new ArrayList<>();
+        b.add(reiniciar); b.add(salir);
         if (estadoJuego == Estado.PERDIDO) {
-            System.out.println("Perdiste");
+            estadoNivel = "Perdiste!";
         } else if (estadoJuego == Estado.GANADO) {
-            System.out.println("Ganaste");
+            estadoNivel = "Ganaste el nivel!";
+            var siguiente = new ButtonType("Avanzar al siguiente nivel");
+            b.add(siguiente);
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, estadoNivel);
+        alert.getButtonTypes().clear();
+        alert.getButtonTypes().addAll(b);
+        Optional<ButtonType> respuesta = alert.showAndWait();
+        if (respuesta.get().equals(salir)) {
+            stage.close();
+        } else if (respuesta.get().equals(reiniciar)) {
+            var menu = new MenuUI(stage);
+            menu.mostrar();
+        } else {
+            juego.siguienteNivel();
+            cambiarTpSafe(AUMENTAR);
         }
     }
 
-    private void disminuirTpSafe() {
-        this.tpSafe = false;
-        int cantidad = Integer.parseInt(cantTpSafe.getText()) - 1;
+    private void cambiarTpSafe(int n) {
+        int cantidad = Integer.parseInt(cantTpSafe.getText()) + n;
         cantTpSafe.setText(Integer.toString(cantidad));
 
         if (cantidad == 0) {
             safe.setDisable(true);
+        } else {
+            safe.setDisable(false);
         }
     }
 
@@ -143,7 +196,8 @@ public class GameUI extends UI {
     }
 
     private void dibujarTablero() {
-        // esto está horrible. basicamente borra tdo y vuelve a dibujar
+        actualizarValores();
+
         for (int i = 0; i < juego.getFilas(); i++) {
             for (int j = 0; j < juego.getColumnas(); j++) {
                 Pane p = (Pane) gridTablero.getChildren().get(j + i * juego.getColumnas());
@@ -154,7 +208,7 @@ public class GameUI extends UI {
         for (var elemento : juego.getElementos()) {
             Pane p = (Pane) gridTablero.getChildren().get(elemento.getY() + elemento.getX() * juego.getColumnas());
             Label l = new Label(elemento.getNombre());
-            l.setAlignment(javafx.geometry.Pos.CENTER);
+            l.setAlignment(Pos.CENTER);
             l.prefWidthProperty().bind(p.widthProperty());
             l.prefHeightProperty().bind(p.heightProperty());
             if (l.getText().equals("Jugador")) {
@@ -166,5 +220,6 @@ public class GameUI extends UI {
             }
             p.getChildren().add(l);
         }
+
     }
 }

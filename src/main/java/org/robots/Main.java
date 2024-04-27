@@ -2,6 +2,7 @@ package org.robots;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import org.robots.vista.GameUI;
 import org.robots.vista.MenuUI;
 
 import java.io.IOException;
