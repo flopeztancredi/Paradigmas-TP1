@@ -22,10 +22,12 @@ import java.util.Random;
 public class GameUI extends UI {
     private final Juego juego;
     private final Stage stage;
-    private boolean tpSafe = false;
+    private final Parent parent;
 
     private final int AUMENTAR = 1;
     private final int DISMINUIR = -1;
+
+    private final GridUI grid;
 
     @FXML
     private GridPane gridTablero;
@@ -48,17 +50,20 @@ public class GameUI extends UI {
     @FXML
     private Label points;
 
+    private String numTps = "0";
 
-    public GameUI(Stage stage, Juego juego) {
+
+    public GameUI(Stage stage, Juego juego) throws IOException {
         this.juego = juego;
         this.stage = stage;
+        this.parent = loadFXML("juego", this);
+        this.grid  = new GridUI(juego, gridTablero);
     }
 
-    public void iniciarJuego() throws IOException {
-        Parent p = loadFXML("juego", this);
-        iniciarTablero(juego.getFilas(), juego.getColumnas());
+    public void iniciarJuego() {
+        grid.iniciarTablero();
         juego.siguienteNivel();
-        dibujarTablero();
+        grid.dibujarTablero();
 
         gridTablero.setOnMouseClicked(e -> {
             Node celda;
@@ -72,38 +77,32 @@ public class GameUI extends UI {
             celda = source;
             var x = GridPane.getRowIndex(celda);
             var y = GridPane.getColumnIndex(celda);
-            Estado estadoJuego;
-            if (this.tpSafe) {
-                estadoJuego = juego.mover(x, y);
-                cambiarTpSafe(DISMINUIR);
-                safe.setSelected(false);
-                this.tpSafe = false;
-            } else {
-                estadoJuego = juego.moverHacia(x, y);
-            }
+            var estadoJuego = juego.mover(x, y);
+            grid.dibujarTablero();
+
             try {
                 corroborarEstado(estadoJuego);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-            dibujarTablero();
+            actualizarValores();
+            safe.setSelected(false);
         });
 
         random.setOnAction(e -> {
-            var rand = new Random();
-            var estadoJuego = juego.mover(rand.nextInt(juego.getFilas()), rand.nextInt(juego.getColumnas()));
+            var estadoJuego = juego.mover();
             try {
                 corroborarEstado(estadoJuego);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-            dibujarTablero();
+            actualizarValores();
+            grid.dibujarTablero();
         });
 
         safe.setOnAction(actionEvent -> {
-            if (juego.activarTpSafe()) {
-                this.tpSafe = true;
-            }
+            juego.activarTpSafe();
+            actualizarTpSafe();
         });
 
         wait.setOnAction(e -> {
@@ -113,10 +112,11 @@ public class GameUI extends UI {
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-            dibujarTablero();
+            actualizarValores();
+            grid.dibujarTablero();
         });
 
-        Scene scene = new Scene(p, WIDTH, HEIGHT);
+        Scene scene = new Scene(this.parent, super.getWIDTH(), super.getHEIGHT());
         stage.setScene(scene);
         stage.show();
     }
@@ -130,10 +130,11 @@ public class GameUI extends UI {
         if (estadoJuego == Estado.JUGANDO) return;
 
         String estadoNivel = " ";
-        var reiniciar = new ButtonType("Volver al menu");
+        var volver = new ButtonType("Volver al menu");
         var salir = new ButtonType("Salir");
+        var reiniciar = new ButtonType("Volver a intentar");
         ArrayList<ButtonType> b = new ArrayList<>();
-        b.add(reiniciar); b.add(salir);
+        b.add(volver); b.add(reiniciar); b.add(salir);
         if (estadoJuego == Estado.PERDIDO) {
             estadoNivel = "Perdiste!";
         } else if (estadoJuego == Estado.GANADO) {
@@ -141,85 +142,31 @@ public class GameUI extends UI {
             var siguiente = new ButtonType("Avanzar al siguiente nivel");
             b.add(siguiente);
         }
-
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, estadoNivel);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Gnome Messi");
+        alert.setHeaderText(estadoNivel);
+        alert.setContentText("Puntuacion: " + points.getText());
         alert.getButtonTypes().clear();
         alert.getButtonTypes().addAll(b);
         Optional<ButtonType> respuesta = alert.showAndWait();
         if (respuesta.get().equals(salir)) {
             stage.close();
-        } else if (respuesta.get().equals(reiniciar)) {
+        } else if (respuesta.get().equals(volver)) {
             var menu = new MenuUI(stage);
             menu.mostrar();
+        } else if (respuesta.get().equals(reiniciar)) {
+            var game = new GameUI(stage, new Juego(juego.getFilas(), juego.getColumnas()));
+            game.iniciarJuego();
         } else {
             juego.siguienteNivel();
-            cambiarTpSafe(AUMENTAR);
+            grid.dibujarTablero();
+            actualizarTpSafe();
         }
     }
 
-    private void cambiarTpSafe(int n) {
-        int cantidad = Integer.parseInt(cantTpSafe.getText()) + n;
+    private void actualizarTpSafe() {
+        int cantidad = juego.getCantTpSafe();
         cantTpSafe.setText(Integer.toString(cantidad));
-
-        if (cantidad == 0) {
-            safe.setDisable(true);
-        } else {
-            safe.setDisable(false);
-        }
-    }
-
-    private void iniciarTablero(int filas, int columnas) {
-        gridTablero.setGridLinesVisible(false);
-        for (int i = 0; i < columnas; i++) {
-            ColumnConstraints columna = new ColumnConstraints();
-            columna.prefWidthProperty().bind(gridTablero.heightProperty().divide(filas));
-            gridTablero.getColumnConstraints().add(columna);
-        }
-
-        for (int i = 0; i < filas; i++) {
-            RowConstraints fila = new RowConstraints();
-            fila.prefHeightProperty().bind(gridTablero.widthProperty().divide(columnas));
-            gridTablero.getRowConstraints().add(fila);
-        }
-
-        for (int i = 0; i < filas; i++) {
-            for (int j = 0; j < columnas; j++) {
-                Pane p = new Pane();
-                if ((i + j) % 2 == 0) {
-                    p.setStyle("-fx-background-color: #C7DCFA");
-                } else {
-                    p.setStyle("-fx-background-color: #13305C");
-                }
-                gridTablero.add(p, j, i);
-            }
-        }
-    }
-
-    private void dibujarTablero() {
-        actualizarValores();
-
-        for (int i = 0; i < juego.getFilas(); i++) {
-            for (int j = 0; j < juego.getColumnas(); j++) {
-                Pane p = (Pane) gridTablero.getChildren().get(j + i * juego.getColumnas());
-                p.getChildren().clear();
-            }
-        }
-
-        for (var elemento : juego.getElementos()) {
-            Pane p = (Pane) gridTablero.getChildren().get(elemento.getY() + elemento.getX() * juego.getColumnas());
-            Label l = new Label(elemento.getNombre());
-            l.setAlignment(Pos.CENTER);
-            l.prefWidthProperty().bind(p.widthProperty());
-            l.prefHeightProperty().bind(p.heightProperty());
-            if (l.getText().equals("Jugador")) {
-                l.setStyle("-fx-background-color: #F0F0F0");
-            } else if (l.getText().equals("Fuego")) {
-                l.setStyle("-fx-background-color: #777777");
-            } else {
-                l.setStyle("-fx-background-color: #FF8000");
-            }
-            p.getChildren().add(l);
-        }
-
+        safe.setDisable(cantidad == 0);
     }
 }
