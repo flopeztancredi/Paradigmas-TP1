@@ -1,7 +1,6 @@
 package org.robots;
 
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.robots.modelo.Juego;
 import org.robots.vista.GameUI;

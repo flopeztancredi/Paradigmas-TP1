@@ -50,9 +50,6 @@ public class GameUI extends UI {
     @FXML
     private Label points;
 
-    private String numTps = "0";
-
-
     public GameUI(Stage stage, Juego juego) throws IOException {
         this.juego = juego;
         this.stage = stage;
