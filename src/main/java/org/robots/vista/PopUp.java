@@ -2,6 +2,10 @@ package org.robots.vista;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.stage.Stage;
+
+import java.io.FileInputStream;
+import java.io.IOException;
 
 public class PopUp extends Alert {
     public static final ButtonType SALIR = new ButtonType("Salir");
@@ -27,6 +31,7 @@ public class PopUp extends Alert {
         } else {
             super.setHeaderText(PERDEDOR);
             super.getButtonTypes().add(REINTENTAR);
+            super.setGraphic(Imagenes.getRandomSprite(Imagenes.JUGADOR_PERDEDOR));
         }
     }
 }

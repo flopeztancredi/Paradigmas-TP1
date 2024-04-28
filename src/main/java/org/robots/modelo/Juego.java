@@ -11,7 +11,7 @@ public class Juego {
     private int nivel;
     private int puntuacion;
     private int cantTpSafe;
-    private boolean esTp;
+    private boolean tpActivado;
 
     public final Vector2 ARRIBA = new Vector2(-1, 0);
     public final Vector2 ABAJO = new Vector2(1, 0);
@@ -23,7 +23,7 @@ public class Juego {
         this.nivel = 0;
         this.cantTpSafe = 0;
         this.puntuacion = 0;
-        this.esTp = false;
+        this.tpActivado = false;
     }
 
     public void siguienteNivel() {
@@ -34,19 +34,20 @@ public class Juego {
     }
 
     public Estado mover(int fila, int columna) {
-        boolean sigueJugando;
+        boolean sigueVivo;
         Vector2 posicion = new Vector2(fila, columna);
-        if (this.esTp) {
-            sigueJugando = tablero.mover(posicion);
-            this.esTp = false;
+        if (this.tpActivado) {
+            sigueVivo = tablero.mover(posicion);
+            this.cantTpSafe--;
+            this.tpActivado = false;
         } else {
             posicion.setX(Integer.compare(fila, tablero.getPosicionJugador().getX()));
             posicion.setY(Integer.compare(columna, tablero.getPosicionJugador().getY()));
             posicion.sumar(tablero.getPosicionJugador());
-            sigueJugando = tablero.mover(posicion);
+            sigueVivo = tablero.mover(posicion);
         }
         this.puntuacion += tablero.getPuntuacionJugador();
-        return definirEstado(sigueJugando);
+        return definirEstado(sigueVivo);
     }
 
     public Estado mover() {
@@ -88,7 +89,11 @@ public class Juego {
     /* Activar TP */
 
     public void activarTpSafe() {
-        this.esTp = this.cantTpSafe-- >= 0;
+        this.tpActivado = this.cantTpSafe-- >= 0;
+    }
+
+    public void toggleTpSafe() {
+        this.tpActivado = !this.tpActivado;
     }
 
     /* Getters */
@@ -117,4 +122,7 @@ public class Juego {
         return tablero.getElementos();
     }
 
+    public boolean isTpSafe() {
+        return this.tpActivado;
+    }
 }

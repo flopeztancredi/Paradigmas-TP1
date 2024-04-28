@@ -113,21 +113,17 @@ public class Tablero {
     public boolean quedarse() { return mover(this.player.getPosicion()); }
 
     public boolean mover(Vector2 pos) {
+        conseguirCelda(player.getPosicion()).sacarObjeto();
         moverRobots(pos);
         return moverJugador(pos);
     }
 
     private boolean moverJugador(Vector2 pos) {
-        Vector2 posAntigua = new Vector2(player.getPosicion());
-        if (conseguirCelda(posAntigua).getElemento().esJugador()) {
-            conseguirCelda(posAntigua).sacarObjeto();
-        }
-        if (!conseguirCelda(pos).estaVacia()) {
+        if (!conseguirCelda(pos).asignarObjeto(player)) {
             return false;
         }
         player.moverse(pos);
         player.sumarPuntos(PUNTUACION_MOVIMIENTO);
-        conseguirCelda(pos).asignarObjeto(player);
         return true;
     }
 
@@ -146,9 +142,7 @@ public class Tablero {
         ArrayList<Robot> robots = new ArrayList<>(this.robots);
         for (var robot: robots) {
             var celdaParaMoverse = conseguirCelda(robot.getPosicion());
-            if (celdaParaMoverse.estaVacia()) {
-                celdaParaMoverse.asignarObjeto(robot);
-            } else {
+            if (!celdaParaMoverse.asignarObjeto(robot)) {
                 manejarColision(robot, celdaParaMoverse);
             }
         }
@@ -158,20 +152,15 @@ public class Tablero {
 
     private void manejarColision(Robot robot, Celda celdaParaMoverse) {
         var elemento = celdaParaMoverse.sacarObjeto();
-        if (elemento.esJugador()) {
-            celdaParaMoverse.asignarObjeto(robot);
-            return;
-        }
-
-        player.sumarPuntos(sacarRobots(robot));
         if (elemento.esFuego()) {
             celdaParaMoverse.asignarObjeto(elemento);
-            return;
+        } else {
+            player.sumarPuntos(sacarRobots((Robot) elemento));
+            var fuego = new Fuego(robot.getPosicion());
+            celdaParaMoverse.incendiar(fuego);
+            fuegos.add(fuego);
         }
-        var fuego = new Fuego(robot.getPosicion());
-        celdaParaMoverse.incendiar(fuego);
-        fuegos.add(fuego);
-        player.sumarPuntos(sacarRobots((Robot) elemento));
+        player.sumarPuntos(sacarRobots(robot));
     }
 
     /* Operaciones auxiliares */

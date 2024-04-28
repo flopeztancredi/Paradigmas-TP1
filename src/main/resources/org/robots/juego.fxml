@@ -48,7 +48,7 @@
         <HBox alignment="CENTER" prefHeight="77.0" prefWidth="200.0" spacing="20.0" style="-fx-background-color: #D3d3d3;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <children>
                 <Button fx:id="btnRandomTp" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="180.0" style="-fx-border-color: white; -fx-background-color: #d3d3d3;" text="Teleport Randomly" />
-                <ToggleButton fx:id="btnSafeTp" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="180.0" style="-fx-background-color: #d3d3d3; -fx-border-color: white;">
+                <Button fx:id="btnSafeTp" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="180.0" style="-fx-background-color: #d3d3d3; -fx-border-color: white;">
                <graphic>
                   <HBox alignment="CENTER" prefHeight="40.0" prefWidth="150.0">
                      <children>
@@ -73,7 +73,7 @@
                         <Insets />
                      </opaqueInsets>
                   </HBox>
-               </graphic></ToggleButton>
+               </graphic></Button>
                 <Button fx:id="btnWait" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="180.0" style="-fx-background-color: #dedede; -fx-border-color: white;" text="Wait for Robots" />
             </children>
         </HBox>

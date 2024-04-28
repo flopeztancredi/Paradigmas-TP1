@@ -1,6 +1,7 @@
 package org.robots.controlador;
 
 import org.robots.GnomeApp;
+import org.robots.modelo.Estado;
 import org.robots.modelo.Juego;
 import org.robots.vista.GameUI;
 import org.robots.vista.MenuUI;
@@ -28,8 +29,8 @@ public class BotonesControlador {
         });
 
         gameUI.setSafeBtnHandler(e -> {
-            juego.activarTpSafe();
-            gameUI.actualizarTpSafe();
+            juego.toggleTpSafe();
+            gameUI.actualizarEstado(Estado.JUGANDO);
         });
 
         gameUI.setRandomBtnHandler(e -> {

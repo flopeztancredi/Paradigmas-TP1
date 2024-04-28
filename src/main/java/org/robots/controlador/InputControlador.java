@@ -27,7 +27,7 @@ public class InputControlador {
     public void iniciar() {
         gridUI.setGridMouseHandler(e -> {
             Node c = getCelda(e);
-            assert c != null;
+            if (c == null) return;
             var estadoJuego = juego.mover(GridPane.getRowIndex(c), GridPane.getColumnIndex(c));
             gameUI.actualizarEstado(estadoJuego);
         });

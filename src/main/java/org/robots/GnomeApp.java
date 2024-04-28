@@ -6,8 +6,11 @@ import org.robots.controlador.BotonesControlador;
 import org.robots.controlador.MenuControlador;
 import org.robots.modelo.Juego;
 import org.robots.vista.GameUI;
+import org.robots.vista.Imagenes;
 import org.robots.vista.MenuUI;
+import org.robots.vista.PopUp;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 
 
@@ -20,9 +23,13 @@ public class GnomeApp extends Application {
     private Juego modelo;
     private Stage stage;
 
+    private final String APP_NAME = "Gnome Messi";
+
     @Override
     public void start(Stage stage) throws IOException {
         this.stage = stage;
+        stage.getIcons().add(Imagenes.getRandomSprite(Imagenes.ICONOS).getImage());
+        stage.setTitle(APP_NAME);
         inicializarMenu();
     }
 

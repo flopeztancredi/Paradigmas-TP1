@@ -1,51 +1,64 @@
 package org.robots.vista;
 
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Objects;
 import java.util.Random;
 
 public class Imagenes {
 
     public static final String[] JUGADOR_DEFAULT = {
-            "img/messi1.png",
-//            "src/main/resources/img/messi2.png",
-//            "src/main/resources/img/messi3.png",
+            "assets/messi1.png",
+            "assets/messi2.png",
+            "assets/messi3.png"
     };
 
     public static final String[] JUGADOR_GANADOR = {
-            "img/messi4.png"
+            "assets/messi_win.png"
     };
 
     public static final String[] JUGADOR_PERDEDOR = {
-            "img/jugador/messi5.png"
+            "assets/messi_lose.png"
     };
 
     public static final String[] ROBOT1_SPRITES = {
-            "img/mbappe1.png",
-//            "src/main/resources/img/vandijk2.png",
-//            "src/main/resources/img/vandijk3.png",
-//            "src/main/resources/img/vandijk4.png",
+            "assets/vandijk1.png",
+            "assets/vandijk2.png",
+            "assets/vandijk3.png",
+            "assets/vandijk4.png",
     };
 
     public static final String[] ROBOT2_SPRITES = {
-            "img/mbappe1.png",
-//            "src/main/resources/img/mbappe2.png",
-//            "src/main/resources/img/mbappe3.png",
-//            "src/main/resources/img/mbappe4.png",
+            "assets/mbappe1.png",
+            "assets/mbappe2.png",
+            "assets/mbappe3.png",
+            "assets/mbappe4.png",
     };
 
     public static final String[] FUEGO_SPRITES = {
-            "img/jugador/fuego.png",
+            "assets/fuego.png",
     };
 
-    public static Image getRandomSprite(String[] ruta) {
+    public static final String[] ICONOS = {
+            "assets/copa.png",
+    };
+
+    public static ImageView getRandomSprite(String[] ruta) {
         Random random = new Random();
         int index = random.nextInt(ruta.length);
         return loadImage(ruta[index]);
     }
 
-    private static Image loadImage(String ruta) {
-        return new Image(Objects.requireNonNull(Image.class.getClassLoader().getResourceAsStream(JUGADOR_DEFAULT[0])));
+    private static ImageView loadImage(String ruta) {
+        FileInputStream archivoImg = null;
+        try {
+            archivoImg = new FileInputStream(ruta);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return new ImageView(new Image(Objects.requireNonNull(archivoImg)));
     }
 }

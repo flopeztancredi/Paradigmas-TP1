@@ -10,11 +10,12 @@ public class Celda {
         this.elemento = null;
     }
 
-    public void asignarObjeto(Elemento objeto) {
+    public boolean asignarObjeto(Elemento objeto) {
         if (!estaVacia()) {
-            return;
+            return false;
         }
         this.elemento = objeto;
+        return true;
     }
 
     public Elemento sacarObjeto() {

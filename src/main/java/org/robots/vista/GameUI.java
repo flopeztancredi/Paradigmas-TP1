@@ -29,7 +29,7 @@ public class GameUI extends UI {
     private Button btnRandomTp;
 
     @FXML
-    private ToggleButton btnSafeTp;
+    private Button btnSafeTp;
 
     @FXML
     private Button btnWait;
@@ -55,29 +55,27 @@ public class GameUI extends UI {
         var gridControlador = new InputControlador(grid, this, juego, scene);
         gridControlador.iniciar();
         juego.siguienteNivel();
-        grid.dibujarTablero();
+        grid.dibujarTablero(Estado.JUGANDO);
 
         stage.setScene(scene);
         stage.show();
     }
 
     public void actualizarEstado(Estado estadoJuego) {
-        grid.dibujarTablero();
+        grid.dibujarTablero(estadoJuego);
         actualizarValores();
-        try {
-            corroborarEstado(estadoJuego);
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
+        corroborarEstado(estadoJuego);
     }
 
     private void actualizarValores() {
         nivel.setText(String.valueOf(juego.getNivel()));
         points.setText(String.valueOf(juego.getPuntuacion()));
         cantTpSafe.setText(Integer.toString(juego.getCantTpSafe()));
+        btnSafeTp.setDisable(juego.getCantTpSafe() == 0);
+        btnSafeTp.setStyle((juego.isTpSafe() ? Colores.FONDO_ACTIVO : Colores.FONDO_INACTIVO) + "; " + Colores.BORDE_BLANCO);
     }
 
-    private void corroborarEstado(Estado estadoJuego) throws IOException {
+    private void corroborarEstado(Estado estadoJuego) {
         if (estadoJuego == Estado.JUGANDO) return;
 
         PopUp popUp = new PopUp(estadoJuego == Estado.GANADO, points.getText());
@@ -90,15 +88,9 @@ public class GameUI extends UI {
             reiniciarJuego.run();
         } else if (buttonType.equals(PopUp.AVANZAR)) {
             juego.siguienteNivel();
-            grid.dibujarTablero();
+            grid.dibujarTablero(Estado.JUGANDO);
             actualizarValores();
         }
-    }
-
-    public void actualizarTpSafe() {
-        int cantidad = juego.getCantTpSafe();
-        cantTpSafe.setText(Integer.toString(cantidad));
-        btnSafeTp.setDisable(cantidad == 0);
     }
 
     public void setVolverAlMenuHandler(Runnable runnable) { this.volverAlMenu = runnable; }
