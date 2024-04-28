@@ -33,6 +33,6 @@ public class Celda {
     }
 
     public boolean estaIncendiada() {
-        return (elemento.esFuego());
+        return (elemento != null && elemento.esFuego());
     }
 }

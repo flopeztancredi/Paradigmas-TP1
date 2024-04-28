@@ -58,14 +58,9 @@ public class Juego {
 
     public Estado moverDireccion(Vector2 direccion) {
         Vector2 posicion = Vector2.sumar(direccion, tablero.getPosicionJugador());
-        boolean sigueJugando;
-        if (posicion.getX() >= this.getFilas() || posicion.getX() < 0 || posicion.getY() >= this.getColumnas() || posicion.getY() < 0) {
-            sigueJugando = tablero.quedarse();
-        } else {
-            sigueJugando = tablero.mover(posicion);
-        }
-        this.puntuacion += tablero.getPuntuacionJugador();
-        return definirEstado(sigueJugando);
+        if (posicion.getX() >= this.getFilas() || posicion.getX() < 0 || posicion.getY() >= this.getColumnas() || posicion.getY() < 0)
+            return quedarse();
+        return mover(posicion.getX(), posicion.getY());
     }
 
     public Vector2 posAleatoria(int rangoX, int rangoY) {
@@ -74,7 +69,8 @@ public class Juego {
     }
 
     public Estado quedarse() {
-        boolean sigueJugando = tablero.quedarse();
+        boolean sigueJugando = tablero.mover(tablero.getPosicionJugador());
+        this.puntuacion += tablero.getPuntuacionJugador();
         return definirEstado(sigueJugando);
     }
 

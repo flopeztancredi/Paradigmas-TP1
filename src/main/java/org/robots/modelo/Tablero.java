@@ -85,8 +85,8 @@ public class Tablero {
         }
 
         for (int i = 0; i < r2; i++) {
-            var pos = generarPosAleatoria();
-            var robot2 = new R2(pos, this);
+            Vector2 pos = generarPosAleatoria();
+            R2 robot2 = new R2(pos, this);
             robots.add(robot2);
             conseguirCelda(pos).asignarObjeto(robot2);
         }
@@ -109,8 +109,6 @@ public class Tablero {
     }
 
     /* Movimientos */
-
-    public boolean quedarse() { return mover(this.player.getPosicion()); }
 
     public boolean mover(Vector2 pos) {
         conseguirCelda(player.getPosicion()).sacarObjeto();
