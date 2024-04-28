@@ -24,10 +24,12 @@ public class PopUp extends Alert {
         super.getButtonTypes().addAll(SALIR, VOLVER);
         super.setTitle(TITULO);
         super.setContentText(CONTENIDO + puntuacion);
+        ((Stage) this.getDialogPane().getScene().getWindow()).getIcons().add(Imagenes.getRandomSprite(Imagenes.ICONOS).getImage());
 
         if (esGanador) {
             super.setHeaderText(GANADOR);
             super.getButtonTypes().add(AVANZAR);
+            super.setGraphic(Imagenes.getRandomSprite(Imagenes.JUGADOR_GANADOR));
         } else {
             super.setHeaderText(PERDEDOR);
             super.getButtonTypes().add(REINTENTAR);
