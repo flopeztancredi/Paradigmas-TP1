@@ -31,8 +31,12 @@ public class Elemento {
         return this instanceof Jugador;
     }
 
-    public boolean esRobot() {
-        return this instanceof Robot;
+    public boolean esRobot1() {
+        return this instanceof R1;
+    }
+
+    public boolean esRobot2() {
+        return this instanceof R2;
     }
 
     public boolean esFuego() {
