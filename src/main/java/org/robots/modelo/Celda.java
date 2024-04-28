@@ -10,12 +10,11 @@ public class Celda {
         this.elemento = null;
     }
 
-    public boolean asignarObjeto(Elemento objeto) {
+    public void asignarObjeto(Elemento objeto) {
         if (!estaVacia()) {
-            return false;
+            return;
         }
         this.elemento = objeto;
-        return true;
     }
 
     public Elemento sacarObjeto() {
@@ -34,12 +33,6 @@ public class Celda {
 
     public void incendiar(Fuego fuego) {
         this.elemento = fuego;
-    }
-
-    public void extinguirFuego() {
-        if (estaIncendiada()) {
-            this.elemento = null;
-        }
     }
 
     public boolean estaIncendiada() {

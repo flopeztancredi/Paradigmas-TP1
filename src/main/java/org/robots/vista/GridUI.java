@@ -1,7 +1,9 @@
 package org.robots.vista;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -15,6 +17,7 @@ public class GridUI {
     public GridUI(Juego juego, GridPane gridTablero) {
         this.juego = juego;
         this.gridTablero = gridTablero;
+        iniciarTablero();
     }
 
     public void iniciarTablero() {
@@ -67,6 +70,9 @@ public class GridUI {
             }
             p.getChildren().add(l);
         }
+    }
 
+    public void setGridMouseHandler(EventHandler<MouseEvent> handler) {
+        gridTablero.setOnMouseClicked(handler);
     }
 }

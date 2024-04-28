@@ -13,7 +13,10 @@ public class Juego {
     private int cantTpSafe;
     private boolean esTp;
 
-
+    public final Vector2 ARRIBA = new Vector2(-1, 0);
+    public final Vector2 ABAJO = new Vector2(1, 0);
+    public final Vector2 IZQUIERDA = new Vector2(0, -1);
+    public final Vector2 DERECHA = new Vector2(0, 1);
 
     public Juego(int filas, int columnas) {
         this.tablero = new Tablero(filas, columnas);
@@ -32,11 +35,15 @@ public class Juego {
 
     public Estado mover(int fila, int columna) {
         boolean sigueJugando;
+        Vector2 posicion = new Vector2(fila, columna);
         if (this.esTp) {
-            sigueJugando = tablero.mover(new Vector2(fila, columna));
+            sigueJugando = tablero.mover(posicion);
             this.esTp = false;
         } else {
-            sigueJugando = tablero.moverHacia(new Vector2(fila, columna));
+            posicion.setX(Integer.compare(fila, tablero.getPosicionJugador().getX()));
+            posicion.setY(Integer.compare(columna, tablero.getPosicionJugador().getY()));
+            posicion.sumar(tablero.getPosicionJugador());
+            sigueJugando = tablero.mover(posicion);
         }
         this.puntuacion += tablero.getPuntuacionJugador();
         return definirEstado(sigueJugando);
@@ -44,7 +51,13 @@ public class Juego {
 
     public Estado mover() {
         boolean sigueJugando = tablero.mover(posAleatoria(this.getFilas(), this.getColumnas()));
-        this.esTp = false;
+        this.puntuacion += tablero.getPuntuacionJugador();
+        return definirEstado(sigueJugando);
+    }
+
+    public Estado moverDireccion(Vector2 direccion) {
+        Vector2 posicion = Vector2.sumar(direccion, tablero.getPosicionJugador());
+        boolean sigueJugando = tablero.mover(posicion);
         this.puntuacion += tablero.getPuntuacionJugador();
         return definirEstado(sigueJugando);
     }
@@ -71,10 +84,6 @@ public class Juego {
 
     public void activarTpSafe() {
         this.esTp = this.cantTpSafe-- >= 0;
-    }
-
-    public void activarTp() {
-        this.esTp = true;
     }
 
     /* Getters */

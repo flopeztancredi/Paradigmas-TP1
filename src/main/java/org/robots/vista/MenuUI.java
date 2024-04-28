@@ -8,13 +8,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
-import org.robots.modelo.Juego;
 
 import java.io.IOException;
 
 public class MenuUI extends UI {
     private final Parent parent;
     private final Stage stage;
+    private Scene scene;
 
     @FXML
     private Button btnJugar;
@@ -28,15 +28,19 @@ public class MenuUI extends UI {
     public MenuUI(Stage stage) throws IOException {
         this.stage = stage;
         this.parent = loadFXML("menu", this);
+        setScene();
+    }
+
+    public void setScene() {
+        this.scene = new Scene(parent, super.getWIDTH(), super.getHEIGHT());
     }
 
     public void mostrar() {
-        Scene scene = new Scene(parent, super.getWIDTH(), super.getHEIGHT());
         stage.setScene(scene);
         stage.show();
     }
 
-    public void agregarHandler(EventHandler<ActionEvent> handler) {
+    public void setBtnHandler(EventHandler<ActionEvent> handler) {
         btnJugar.setOnAction(handler);
     }
 

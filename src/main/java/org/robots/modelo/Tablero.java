@@ -3,7 +3,6 @@ package org.robots.modelo;
 import org.robots.modelo.herramientas.Vector2;
 import org.robots.modelo.personajes.*;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -11,10 +10,12 @@ public class Tablero {
     private final Celda[][] celdas;
     private final int filas;
     private final int columnas;
+
     private Jugador player;
     private final ArrayList<Robot> robots;
     private final ArrayList<Fuego> fuegos;
 
+    private static final int PUNTUACION_MOVIMIENTO = 10;
 
     public Tablero(int filas, int columnas) {
         this.filas = filas;
@@ -36,6 +37,10 @@ public class Tablero {
 
     public int getPuntuacionJugador() {
         return this.player.getPuntuacion();
+    }
+
+    public Vector2 getPosicionJugador() {
+        return this.player.getPosicion();
     }
 
     public ArrayList<Elemento> getElementos() {
@@ -105,18 +110,11 @@ public class Tablero {
 
     /* Movimientos */
 
+    public boolean quedarse() { return mover(this.player.getPosicion()); }
+
     public boolean mover(Vector2 pos) {
         moverRobots(pos);
         return moverJugador(pos);
-    }
-
-    public boolean quedarse() { return mover(this.player.getPosicion()); }
-
-    public boolean moverHacia(Vector2 posClickeada) {
-        posClickeada.setX(Integer.compare(posClickeada.getX(), this.player.getX()));
-        posClickeada.setY(Integer.compare(posClickeada.getY(), this.player.getY()));
-        posClickeada.sumar(this.player.getPosicion());
-        return mover(posClickeada);
     }
 
     private boolean moverJugador(Vector2 pos) {
@@ -128,6 +126,7 @@ public class Tablero {
             return false;
         }
         player.moverse(pos);
+        player.sumarPuntos(PUNTUACION_MOVIMIENTO);
         conseguirCelda(pos).asignarObjeto(player);
         return true;
     }

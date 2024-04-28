@@ -35,8 +35,7 @@ public class Vector2 {
         this.y += vector.getY();
     }
 
-    public void restar(Vector2 vector) {
-        this.x -= vector.getX();
-        this.y -= vector.getY();
+    public static Vector2 sumar(Vector2 vector1, Vector2 vector2) {
+        return new Vector2(vector1.getX() + vector2.getX(), vector1.getY() + vector2.getY());
     }
 }

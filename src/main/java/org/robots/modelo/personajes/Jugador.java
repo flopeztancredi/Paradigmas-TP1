@@ -4,7 +4,6 @@ import org.robots.modelo.Movimiento;
 import org.robots.modelo.herramientas.Vector2;
 
 public class Jugador extends Elemento implements Movimiento {
-    private int puntuacionPorMovimiento = 10;
     private int puntuacion;
 
     public Jugador(Vector2 pos) {
@@ -20,7 +19,7 @@ public class Jugador extends Elemento implements Movimiento {
     public void sumarPuntos(int puntos) { this.puntuacion += puntos; }
 
     public int getPuntuacion() {
-        var pts = this.puntuacionPorMovimiento + this.puntuacion;
+        var pts = this.puntuacion;
         this.puntuacion = 0;
         return pts;
     }
