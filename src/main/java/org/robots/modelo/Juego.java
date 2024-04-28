@@ -57,7 +57,12 @@ public class Juego {
 
     public Estado moverDireccion(Vector2 direccion) {
         Vector2 posicion = Vector2.sumar(direccion, tablero.getPosicionJugador());
-        boolean sigueJugando = tablero.mover(posicion);
+        boolean sigueJugando;
+        if (posicion.getX() >= this.getFilas() || posicion.getX() < 0 || posicion.getY() >= this.getColumnas() || posicion.getY() < 0) {
+            sigueJugando = tablero.quedarse();
+        } else {
+            sigueJugando = tablero.mover(posicion);
+        }
         this.puntuacion += tablero.getPuntuacionJugador();
         return definirEstado(sigueJugando);
     }

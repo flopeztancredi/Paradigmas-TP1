@@ -1,5 +1,6 @@
 package org.robots.controlador;
 
+import javafx.scene.input.KeyCode;
 import org.robots.GnomeApp;
 import org.robots.vista.MenuUI;
 
@@ -16,10 +17,19 @@ public class MenuControlador {
 
     public void iniciar() {
         menuUI.setBtnHandler(e -> {
+            if (menuUI.getFilas() < 0 || menuUI.getColumnas() < 0 ) {
+                return;
+            }
             try {
                 gnomeApp.inicializarJuego();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
+            }
+        });
+
+        menuUI.setSceneHandler(e -> {
+            if (e.getCode().equals(KeyCode.ENTER)) {
+                menuUI.getBtnJugar().fire();
             }
         });
     }

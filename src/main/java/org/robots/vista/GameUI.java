@@ -74,6 +74,7 @@ public class GameUI extends UI {
     private void actualizarValores() {
         nivel.setText(String.valueOf(juego.getNivel()));
         points.setText(String.valueOf(juego.getPuntuacion()));
+        cantTpSafe.setText(Integer.toString(juego.getCantTpSafe()));
     }
 
     private void corroborarEstado(Estado estadoJuego) throws IOException {

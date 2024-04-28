@@ -7,6 +7,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import org.robots.modelo.Estado;
 import org.robots.modelo.Juego;
+import org.robots.modelo.herramientas.Vector2;
 import org.robots.vista.GameUI;
 import org.robots.vista.GridUI;
 
@@ -38,13 +39,13 @@ public class InputControlador {
                 case KP_UP:
                     estadoJuego = juego.moverDireccion(juego.ARRIBA);
                     break;
-                case S:
-                case KP_DOWN:
-                    estadoJuego = juego.moverDireccion(juego.ABAJO);
-                    break;
                 case A:
                 case KP_LEFT:
                     estadoJuego = juego.moverDireccion(juego.IZQUIERDA);
+                    break;
+                case S:
+                case KP_DOWN:
+                    estadoJuego = juego.moverDireccion(juego.ABAJO);
                     break;
                 case D:
                 case KP_RIGHT:
@@ -52,6 +53,21 @@ public class InputControlador {
                     break;
                 case CONTROL:
                     estadoJuego = juego.quedarse();
+                    break;
+                case Q:
+                    estadoJuego = juego.moverDireccion(Vector2.sumar(juego.ARRIBA, juego.IZQUIERDA));
+                    break;
+                case E:
+                    estadoJuego = juego.moverDireccion(Vector2.sumar(juego.ARRIBA, juego.DERECHA));
+                    break;
+                case Z:
+                    estadoJuego = juego.moverDireccion(Vector2.sumar(juego.ABAJO, juego.IZQUIERDA));
+                    break;
+                case C:
+                    estadoJuego = juego.moverDireccion(Vector2.sumar(juego.ABAJO, juego.DERECHA));
+                    break;
+                case T:
+                    estadoJuego = juego.mover();
                     break;
                 default:
                     break;

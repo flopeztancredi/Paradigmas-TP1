@@ -6,7 +6,7 @@ import javafx.scene.control.ButtonType;
 public class PopUp extends Alert {
     public static final ButtonType SALIR = new ButtonType("Salir");
     public static final ButtonType VOLVER = new ButtonType("Volver al menú");
-    public static final ButtonType REINTENTAR = new ButtonType("Reintentar nivel");
+    public static final ButtonType REINTENTAR = new ButtonType("Reintentar");
     public static final ButtonType AVANZAR = new ButtonType("Avanzar nivel");
 
     private final String TITULO = "Gnome Messi";
