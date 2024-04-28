@@ -88,10 +88,6 @@ public class Juego {
 
     /* Activar TP */
 
-    public void activarTpSafe() {
-        this.tpActivado = this.cantTpSafe-- >= 0;
-    }
-
     public void toggleTpSafe() {
         this.tpActivado = !this.tpActivado;
     }

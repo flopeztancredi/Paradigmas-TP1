@@ -28,15 +28,11 @@ public class Celda {
         return this.elemento == null;
     }
 
-    public Elemento getElemento() {
-        return this.elemento;
-    }
-
     public void incendiar(Fuego fuego) {
         this.elemento = fuego;
     }
 
     public boolean estaIncendiada() {
-        return (this.elemento instanceof Fuego);
+        return (elemento.esFuego());
     }
 }

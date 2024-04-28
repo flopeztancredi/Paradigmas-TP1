@@ -4,17 +4,15 @@ import org.robots.modelo.Movimiento;
 import org.robots.modelo.Tablero;
 import org.robots.modelo.herramientas.Vector2;
 
-public abstract class Robot extends Elemento implements Movimiento {
-    private final Tablero tablero;
+public class Robot extends Elemento implements Movimiento {
     private final int puntuacion;
 
     public Robot(Vector2 posicion, Tablero tablero, String nombre, int puntuacion) {
         super(posicion, nombre);
-        this.tablero = tablero;
         this.puntuacion = puntuacion;
     }
 
-    public boolean moverse(Vector2 posJugador) {
+    public boolean moverse(Vector2 posJugador, Tablero tablero) {
         var movimiento = calcularPosicion(posJugador);
         this.posicion.sumar(movimiento);
         return !tablero.esPosIncendiada(this.posicion);

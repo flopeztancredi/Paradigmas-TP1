@@ -122,7 +122,7 @@ public class Tablero {
         if (!conseguirCelda(pos).asignarObjeto(player)) {
             return false;
         }
-        player.moverse(pos);
+        player.moverse(pos, this);
         player.sumarPuntos(PUNTUACION_MOVIMIENTO);
         return true;
     }
@@ -131,7 +131,7 @@ public class Tablero {
         for (var robot : robots) {
             var posAntigua = new Vector2(robot.getPosicion());
             conseguirCelda(posAntigua).sacarObjeto();
-            robot.moverse(posJugador);
+            robot.moverse(posJugador, this);
         }
         asignarMovimientos();
     }
@@ -147,8 +147,6 @@ public class Tablero {
             }
         }
     }
-
-    // manejarColision con polimorfismo te extrañamos
 
     private void manejarColision(Robot robot, Celda celdaParaMoverse) {
         var elemento = celdaParaMoverse.sacarObjeto();
@@ -170,7 +168,7 @@ public class Tablero {
         return robot.getPuntuacion();
     }
 
-    public Vector2 generarPosAleatoria() {
+    private Vector2 generarPosAleatoria() {
         var rand = new Random();
         Vector2 posicion = new Vector2(rand.nextInt(filas), rand.nextInt(columnas));
         while (!esPosValida(posicion)) {

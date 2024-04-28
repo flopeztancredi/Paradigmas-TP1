@@ -1,6 +1,7 @@
 package org.robots.modelo.personajes;
 
 import org.robots.modelo.Movimiento;
+import org.robots.modelo.Tablero;
 import org.robots.modelo.herramientas.Vector2;
 
 public class Jugador extends Elemento implements Movimiento {
@@ -11,7 +12,7 @@ public class Jugador extends Elemento implements Movimiento {
         puntuacion = 0;
     }
 
-    public boolean moverse(Vector2 posicion) {
+    public boolean moverse(Vector2 posicion, Tablero tablero) {
         this.posicion = posicion;
         return true;
     }
