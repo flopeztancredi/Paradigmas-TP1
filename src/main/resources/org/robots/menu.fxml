@@ -45,22 +45,22 @@
                <children>
                   <VBox alignment="CENTER" prefWidth="170.0">
                      <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" text="Arriba: W - Up">
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Arriba: W">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label alignment="CENTER" contentDisplay="CENTER" text="Abajo: S - Down">
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Abajo: S ">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label alignment="CENTER" contentDisplay="CENTER" text="Izquierda: A - Left">
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Izquierda: A">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label alignment="CENTER" contentDisplay="CENTER" text="Derecha: D - Right">
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Derecha: D">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -95,6 +95,15 @@
                            </font>
                         </Label>
                         <Label alignment="CENTER" contentDisplay="CENTER" layoutX="31.0" layoutY="80.0" text="Quedarse Quieto: CTRL">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" prefWidth="170.0">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="99.0" prefWidth="211.0" text="También puedes hacer click sobre la casilla hacia la que te quieres dirigir (o teletransportar)" textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
                            <font>
                               <Font size="14.0" />
                            </font>
