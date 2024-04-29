@@ -22,6 +22,10 @@ public class InputControlador {
         this.juego = juego;
     }
 
+    /**
+     * iniciar le asigna la acción correspondiente al click sobre el tablero así como a los controles del
+     * teclado
+     */
     public void iniciar() {
         gridUI.setGridMouseHandler(e -> {
             Node c = getCelda(e);
@@ -85,6 +89,11 @@ public class InputControlador {
         });
     }
 
+    /**
+     * getCelda devuelve la celda en la que se clickeó a partir del nodo en el que se hizo click
+     * @param e MouseEvent
+     * @return Node
+     */
     private Node getCelda(MouseEvent e) {
         var source = (Node) e.getTarget();
         if (source instanceof GridPane) return null;

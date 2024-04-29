@@ -22,6 +22,9 @@ public class BotonesControlador {
         this.gnomeApp = gnomeApp;
     }
 
+    /**
+     * iniciar le asigna la acción correspondiente a cada uno de los botones disponibles del juego
+     */
     public void iniciar() {
         gameUI.setWaitBtnHandler(e -> {
             var estadoJuego = juego.quedarse();

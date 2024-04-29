@@ -95,6 +95,12 @@ public class Tablero {
         }
     }
 
+    /**
+     * siguienteNivel prepara al tablero para jugar el próximo nivel. Recibe la cantidad de R1 y R2
+     * que aparecerán en este.
+     * @param robots1 int
+     * @param robots2 int
+     */
     public void siguienteNivel(int robots1, int robots2) {
         reiniciarTablero();
         inicializarJugador();
@@ -115,6 +121,12 @@ public class Tablero {
         return moverJugador(pos);
     }
 
+    /**
+     * moverJugador coloca al jugador en la celda en la que debe estar según su posición. Devuelve False si
+     * esta celda ya está ocupada, True en caso contrario (y suma puntos).
+     * @param pos Vector2
+     * @return boolean
+     */
     private boolean moverJugador(Vector2 pos) {
         if (!conseguirCelda(pos).asignarObjeto(player)) {
             return false;
@@ -124,6 +136,11 @@ public class Tablero {
         return true;
     }
 
+    /**
+     * moverRobots saca a los robots de su antigua posición, calcula para todos la nueva posición en la que
+     * deberían estar en base a la del jugador, y luego asigna los movimientos correspondientes.
+     * @param posJugador Vector2
+     */
     private void moverRobots(Vector2 posJugador) {
         for (var robot : robots) {
             var posAntigua = new Vector2(robot.getPosicion());

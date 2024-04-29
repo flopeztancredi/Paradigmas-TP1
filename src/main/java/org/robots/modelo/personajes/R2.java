@@ -10,6 +10,14 @@ public class R2 extends Robot {
         super(posicion, 50);
     }
 
+    /**
+     * moverse para R2 realiza dos movimientos por separado. Devuelve False si alguno de los dos es inválido,
+     * True en caso contrario.
+     * @param posJugador Vector2
+     * @param tablero Tablero
+     * @return boolean
+     */
+
     @Override
     public boolean moverse(Vector2 posJugador, Tablero tablero) {
         if (!super.moverse(posJugador, tablero)) {

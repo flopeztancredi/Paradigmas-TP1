@@ -32,6 +32,14 @@ public class Juego {
         tablero.siguienteNivel(r1, r2);
     }
 
+    /**
+     * mover corrobora si el movimiento del jugador es una teletransportación o no. Si no lo es, calcula hacia
+     * qué casilla debería moverse el jugador. Luego llama a mover al tablero, con la nueva posición del jugador.
+     * Devuelve un estado a partir del booleano recibido por este llamado.
+     * @param fila int
+     * @param columna int
+     * @return Estado
+     */
     public Estado mover(int fila, int columna) {
         var posicion = new Vector2(fila, columna);
         if (this.tpActivado) {

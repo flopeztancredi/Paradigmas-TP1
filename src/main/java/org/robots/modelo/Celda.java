@@ -9,6 +9,12 @@ public class Celda {
         this.elemento = null;
     }
 
+    /**
+     * asignarObjeto coloca el elemento que recibe en esta celda. Devuelve True si el elemento fue asignado
+     * correctamente, False en caso de que ya haya un elemento ocupando esta celda.
+     * @param objeto Elemento
+     * @return boolean
+     */
     public boolean asignarObjeto(Elemento objeto) {
         if (!estaVacia()) {
             return false;

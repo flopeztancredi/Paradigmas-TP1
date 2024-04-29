@@ -5,7 +5,6 @@ import javafx.scene.image.ImageView;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Objects;
 import java.util.Random;
 
 public class Imagenes {

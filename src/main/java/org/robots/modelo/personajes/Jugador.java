@@ -12,6 +12,12 @@ public class Jugador extends Elemento implements Movimiento {
         puntuacion = 0;
     }
 
+    /**
+     * moverse asigna la posición pasada por parámetro al jugador, devuelve True
+     * @param posicion Vector2
+     * @param tablero Tablero
+     * @return boolean
+     */
     public boolean moverse(Vector2 posicion, Tablero tablero) {
         this.posicion = posicion;
         return true;
