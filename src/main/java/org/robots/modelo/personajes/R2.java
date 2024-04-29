@@ -5,16 +5,25 @@ import org.robots.modelo.herramientas.Vector2;
 
 public class R2 extends Robot {
 
-    public R2(Vector2 posicion, Tablero tablero) {
-        super(posicion, tablero, "R2", 50);
+
+    public R2(Vector2 posicion) {
+        super(posicion, 50);
     }
 
+    /**
+     * moverse para R2 realiza dos movimientos por separado. Devuelve False si alguno de los dos es inválido,
+     * True en caso contrario.
+     * @param posJugador Vector2
+     * @param tablero Tablero
+     * @return boolean
+     */
+
     @Override
-    public boolean moverse(Vector2 posJugador) {
-        if (!super.moverse(posJugador)) {
+    public boolean moverse(Vector2 posJugador, Tablero tablero) {
+        if (!super.moverse(posJugador, tablero)) {
             return false;
         }
-        return super.moverse(posJugador);
+        return super.moverse(posJugador, tablero);
     }
 
 }

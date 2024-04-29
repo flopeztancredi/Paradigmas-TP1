@@ -1,27 +1,35 @@
 package org.robots.modelo.personajes;
 
 import org.robots.modelo.Movimiento;
+import org.robots.modelo.Tablero;
 import org.robots.modelo.herramientas.Vector2;
 
 public class Jugador extends Elemento implements Movimiento {
-    private int puntuacionPorMovimiento = 10;
     private int puntuacion;
 
     public Jugador(Vector2 pos) {
-        super(pos, "Jugador");
+        super(pos);
         puntuacion = 0;
     }
 
-    public boolean moverse(Vector2 posicion) {
+    /**
+     * moverse asigna la posición pasada por parámetro al jugador, devuelve True
+     * @param posicion Vector2
+     * @param tablero Tablero
+     * @return boolean
+     */
+    public boolean moverse(Vector2 posicion, Tablero tablero) {
         this.posicion = posicion;
         return true;
     }
 
-    public void sumarPuntos(int puntos) { this.puntuacion += puntos; }
+    public void sumarPuntos(int puntos) {
+        this.puntuacion += puntos;
+    }
+
+    /* Getters */
 
     public int getPuntuacion() {
-        var pts = this.puntuacionPorMovimiento + this.puntuacion;
-        this.puntuacion = 0;
-        return pts;
+        return this.puntuacion;
     }
 }

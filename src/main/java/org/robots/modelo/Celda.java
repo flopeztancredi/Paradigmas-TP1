@@ -1,7 +1,6 @@
 package org.robots.modelo;
 
 import org.robots.modelo.personajes.Elemento;
-import org.robots.modelo.personajes.Fuego;
 
 public class Celda {
     private Elemento elemento;
@@ -10,6 +9,12 @@ public class Celda {
         this.elemento = null;
     }
 
+    /**
+     * asignarObjeto coloca el elemento que recibe en esta celda. Devuelve True si el elemento fue asignado
+     * correctamente, False en caso de que ya haya un elemento ocupando esta celda.
+     * @param objeto Elemento
+     * @return boolean
+     */
     public boolean asignarObjeto(Elemento objeto) {
         if (!estaVacia()) {
             return false;
@@ -18,31 +23,23 @@ public class Celda {
         return true;
     }
 
+    /**
+     * sacarObjeto elimina al objeto de la celda y lo devuelve
+     * @return Elemento
+     */
     public Elemento sacarObjeto() {
         Elemento objeto = this.elemento;
         this.elemento = null;
         return objeto;
     }
 
+    /* Validaciones */
+
     public boolean estaVacia() {
         return this.elemento == null;
     }
 
-    public Elemento getElemento() {
-        return this.elemento;
-    }
-
-    public void incendiar(Fuego fuego) {
-        this.elemento = fuego;
-    }
-
-    public void extinguirFuego() {
-        if (estaIncendiada()) {
-            this.elemento = null;
-        }
-    }
-
     public boolean estaIncendiada() {
-        return (this.elemento instanceof Fuego);
+        return (elemento != null && elemento.esFuego());
     }
 }

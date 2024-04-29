@@ -3,18 +3,18 @@ package org.robots.vista;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
-import org.robots.modelo.Juego;
 
 import java.io.IOException;
 
 public class MenuUI extends UI {
-    private final Parent parent;
+    private final int INVALIDO = -1;
     private final Stage stage;
+    private final Scene scene;
 
     @FXML
     private Button btnJugar;
@@ -27,25 +27,52 @@ public class MenuUI extends UI {
 
     public MenuUI(Stage stage) throws IOException {
         this.stage = stage;
-        this.parent = loadFXML("menu", this);
+        var parent = loadFXML("menu", this);
+        this.scene = new Scene(parent, WIDTH, HEIGHT);
     }
 
+    /**
+     * Muestra la escena
+     */
     public void mostrar() {
-        Scene scene = new Scene(parent, super.getWIDTH(), super.getHEIGHT());
         stage.setScene(scene);
         stage.show();
     }
 
-    public void agregarHandler(EventHandler<ActionEvent> handler) {
-        btnJugar.setOnAction(handler);
-    }
+    /* Getters */
 
     public int getFilas() {
-        return Integer.parseInt(txtFilas.getText());
+        int valor;
+        try {
+            valor = Integer.parseInt(txtFilas.getText());
+        } catch (NumberFormatException e) {
+            valor = INVALIDO;
+        }
+        return valor;
     }
 
     public int getColumnas() {
-        return Integer.parseInt(txtColumnas.getText());
+        int valor;
+        try {
+            valor = Integer.parseInt(txtColumnas.getText());
+        } catch (NumberFormatException e) {
+            valor = INVALIDO;
+        }
+        return valor;
+    }
+
+    public Button getBtnJugar() {
+        return this.btnJugar;
+    }
+
+    /* Setters */
+
+    public void setBtnHandler(EventHandler<ActionEvent> handler) {
+        btnJugar.setOnAction(handler);
+    }
+
+    public void setSceneHandler(EventHandler<KeyEvent> handler) {
+        scene.setOnKeyPressed(handler);
     }
 
 }

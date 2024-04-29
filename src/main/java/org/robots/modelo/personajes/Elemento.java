@@ -4,12 +4,30 @@ import org.robots.modelo.herramientas.Vector2;
 
 public class Elemento {
     protected Vector2 posicion;
-    private final String nombre;
 
-    public Elemento(Vector2 posicion, String nombre) {
+    public Elemento(Vector2 posicion) {
         this.posicion = posicion;
-        this.nombre = nombre;
     }
+
+    /* Validaciones */
+
+    public boolean esJugador() {
+        return this instanceof Jugador;
+    }
+
+    public boolean esRobot1() {
+        return this instanceof R1;
+    }
+
+    public boolean esRobot2() {
+        return this instanceof R2;
+    }
+
+    public boolean esFuego() {
+        return this instanceof Fuego;
+    }
+
+    /* Getters */
 
     public Vector2 getPosicion() {
         return posicion;
@@ -21,21 +39,5 @@ public class Elemento {
 
     public int getY() {
         return posicion.getY();
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public boolean esJugador() {
-        return this instanceof Jugador;
-    }
-
-    public boolean esRobot() {
-        return this instanceof Robot;
-    }
-
-    public boolean esFuego() {
-        return this instanceof Fuego;
     }
 }
