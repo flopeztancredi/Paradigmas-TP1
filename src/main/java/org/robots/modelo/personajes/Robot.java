@@ -7,8 +7,8 @@ import org.robots.modelo.herramientas.Vector2;
 public class Robot extends Elemento implements Movimiento {
     private final int puntuacion;
 
-    public Robot(Vector2 posicion, Tablero tablero, String nombre, int puntuacion) {
-        super(posicion, nombre);
+    public Robot(Vector2 posicion, int puntuacion) {
+        super(posicion);
         this.puntuacion = puntuacion;
     }
 

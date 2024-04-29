@@ -1,8 +1,6 @@
 package org.robots.controlador;
 
 import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -16,14 +14,12 @@ public class InputControlador {
     private final GridUI gridUI;
     private final GameUI gameUI;
     private final Juego juego;
-    private final Scene scene;
 
 
-    public InputControlador(GridUI gridUI, GameUI gameUI, Juego juego, Scene scene) {
+    public InputControlador(GridUI gridUI, GameUI gameUI, Juego juego) {
         this.gridUI = gridUI;
         this.gameUI = gameUI;
         this.juego = juego;
-        this.scene = scene;
     }
 
     public void iniciar() {
@@ -34,7 +30,7 @@ public class InputControlador {
             gameUI.actualizarEstado(estadoJuego);
         });
 
-        scene.setOnKeyPressed(e -> {
+        gridUI.setGridKeyHandler(e -> {
             var estadoJuego = Estado.JUGANDO;
             var cambio = false;
             switch (e.getCode()) {
@@ -55,8 +51,8 @@ public class InputControlador {
                     cambio = true;
                     break;
                 case CONTROL:
-                    cambio = true;
                     estadoJuego = juego.quedarse();
+                    cambio = true;
                     break;
                 case Q:
                     estadoJuego = juego.moverDireccion(Vector2.sumar(juego.ARRIBA, juego.IZQUIERDA));

@@ -46,19 +46,29 @@ public class Imagenes {
             "assets/copa.png",
     };
 
+    /**
+     * Devuelve una imagen aleatoria del array de rutas indicado por parámetro
+     * @param ruta String[]
+     * @return ImageView
+     */
     public static ImageView getRandomSprite(String[] ruta) {
         Random random = new Random();
         int index = random.nextInt(ruta.length);
-        return loadImage(ruta[index]);
-    }
-
-    private static ImageView loadImage(String ruta) {
-        FileInputStream archivoImg = null;
         try {
-            archivoImg = new FileInputStream(ruta);
+            return loadImage(ruta[index]);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            return null;
         }
-        return new ImageView(new Image(Objects.requireNonNull(archivoImg)));
+    }
+
+    /**
+     * Devuelve una imagen según la ruta indicada por parámetro
+     * @param ruta String
+     * @return ImageView
+     */
+    private static ImageView loadImage(String ruta) throws FileNotFoundException {
+        FileInputStream archivoImg = new FileInputStream(ruta);
+        return new ImageView(new Image(archivoImg));
     }
 }

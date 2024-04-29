@@ -5,8 +5,9 @@ import org.robots.modelo.herramientas.Vector2;
 
 public class R2 extends Robot {
 
-    public R2(Vector2 posicion, Tablero tablero) {
-        super(posicion, tablero, "R2", 50);
+
+    public R2(Vector2 posicion) {
+        super(posicion, 50);
     }
 
     @Override

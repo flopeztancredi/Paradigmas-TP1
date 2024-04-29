@@ -1,7 +1,9 @@
 package org.robots.vista;
 
 import javafx.event.EventHandler;
+import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -13,15 +15,21 @@ import org.robots.modelo.personajes.Elemento;
 
 public class GridUI {
     private final Juego juego;
-    private final GridPane gridTablero;
+    private Scene scene;
+    private GridPane gridTablero;
 
-    public GridUI(Juego juego, GridPane gridTablero) {
+    public GridUI(Juego juego) {
         this.juego = juego;
-        this.gridTablero = gridTablero;
-        iniciarTablero();
     }
 
-    public void iniciarTablero() {
+    /**
+     * Inicializa el tablero con las filas y columnas del juego
+     * @param gridTablero GridPane
+     * @param scene Scene
+     */
+    public void inicializarTablero(GridPane gridTablero, Scene scene) {
+        this.gridTablero = gridTablero;
+        this.scene = scene;
         gridTablero.setGridLinesVisible(false);
         for (int i = 0; i < juego.getColumnas(); i++) {
             ColumnConstraints columna = new ColumnConstraints();
@@ -48,6 +56,10 @@ public class GridUI {
         }
     }
 
+    /**
+     * Dibuja el tablero con los elementos del juego
+     * @param estadoJuego Estado
+     */
     public void dibujarTablero(Estado estadoJuego) {
         vaciarTablero();
         for (var elemento : juego.getElementos()) {
@@ -60,6 +72,9 @@ public class GridUI {
         }
     }
 
+    /**
+     * Vacía todas las celdas del tablero
+     */
     private void vaciarTablero() {
         for (int i = 0; i < juego.getFilas(); i++) {
             for (int j = 0; j < juego.getColumnas(); j++) {
@@ -69,6 +84,12 @@ public class GridUI {
         }
     }
 
+    /**
+     * Consigue la sprite del elemento indicado por parámetro según el estadoJuego correspondiente
+     * @param elemento Elemento
+     * @param estadoJuego Estado
+     * @return ImageView
+     */
     private ImageView conseguirSprite(Elemento elemento, Estado estadoJuego) {
         if (elemento.esJugador() && estadoJuego == Estado.JUGANDO) {
             return Imagenes.getRandomSprite(Imagenes.JUGADOR_DEFAULT);
@@ -85,7 +106,13 @@ public class GridUI {
         }
     }
 
+    /* Setters */
+
     public void setGridMouseHandler(EventHandler<MouseEvent> handler) {
         gridTablero.setOnMouseClicked(handler);
+    }
+
+    public void setGridKeyHandler(EventHandler<KeyEvent> handler) {
+        scene.setOnKeyPressed(handler);
     }
 }

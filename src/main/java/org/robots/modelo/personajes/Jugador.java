@@ -8,7 +8,7 @@ public class Jugador extends Elemento implements Movimiento {
     private int puntuacion;
 
     public Jugador(Vector2 pos) {
-        super(pos, "Jugador");
+        super(pos);
         puntuacion = 0;
     }
 
@@ -17,11 +17,13 @@ public class Jugador extends Elemento implements Movimiento {
         return true;
     }
 
-    public void sumarPuntos(int puntos) { this.puntuacion += puntos; }
+    public void sumarPuntos(int puntos) {
+        this.puntuacion += puntos;
+    }
+
+    /* Getters */
 
     public int getPuntuacion() {
-        var pts = this.puntuacion;
-        this.puntuacion = 0;
-        return pts;
+        return this.puntuacion;
     }
 }

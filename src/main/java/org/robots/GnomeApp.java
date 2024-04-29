@@ -3,49 +3,62 @@ package org.robots;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.robots.controlador.BotonesControlador;
+import org.robots.controlador.InputControlador;
 import org.robots.controlador.MenuControlador;
 import org.robots.modelo.Juego;
-import org.robots.vista.GameUI;
-import org.robots.vista.Imagenes;
-import org.robots.vista.MenuUI;
-import org.robots.vista.PopUp;
+import org.robots.vista.*;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Objects;
 
 
 /**
  * JavaFX App
  */
 public class GnomeApp extends Application {
-    private MenuUI menu;
-    private GameUI game;
-    private Juego modelo;
+    private MenuUI menuVista;
     private Stage stage;
 
-    private final String APP_NAME = "Gnome Messi";
+    private final String NOMBRE_JUEGO = "Gnome Messi";
 
+    /**
+     * Comienza la ejecución de la aplicación
+     * @param stage Stage
+     * @throws IOException No se pudo cargar el menú
+     */
     @Override
     public void start(Stage stage) throws IOException {
         this.stage = stage;
-        stage.getIcons().add(Imagenes.getRandomSprite(Imagenes.ICONOS).getImage());
-        stage.setTitle(APP_NAME);
+        stage.getIcons().add(Objects.requireNonNull(Imagenes.getRandomSprite(Imagenes.ICONOS)).getImage());
+        stage.setTitle(NOMBRE_JUEGO);
         inicializarMenu();
     }
 
+    /**
+     * Inicializa el menú del juego y su controlador y lo muestra
+     * @throws IOException No se pudo cargar el menú
+     */
     private void inicializarMenu() throws IOException {
-        this.menu = new MenuUI(stage);
-        var menuControlador = new MenuControlador(menu, this);
+        this.menuVista = new MenuUI(stage);
+        var menuControlador = new MenuControlador(menuVista, this);
         menuControlador.iniciar();
-        menu.mostrar();
+        menuVista.mostrar();
     }
 
+    /**
+     * Inicializa el juego y sus controladores
+     * @throws IOException No se pudo cargar el juego
+     */
     public void inicializarJuego() throws IOException {
-        this.modelo = new Juego(menu.getFilas(), menu.getColumnas());
-        this.game = new GameUI(stage);
-        var botonesControlador = new BotonesControlador(modelo, game, menu, this);
+        var juegoModelo = new Juego(menuVista.getFilas(), menuVista.getColumnas());
+        var juegoVista = new GameUI(stage);
+        var grid = new GridUI(juegoModelo);
+        
+        var botonesControlador = new BotonesControlador(juegoModelo, juegoVista, menuVista, this);
         botonesControlador.iniciar();
-        game.inicializarJuego(modelo);
+        juegoVista.inicializarJuego(juegoModelo, grid);
+        var gridControlador = new InputControlador(grid, juegoVista, juegoModelo);
+        gridControlador.iniciar();
     }
 
     public static void main(String[] args) {

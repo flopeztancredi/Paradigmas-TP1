@@ -4,8 +4,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.util.Objects;
 
 public class PopUp extends Alert {
     public static final ButtonType SALIR = new ButtonType("Salir");
@@ -24,7 +23,7 @@ public class PopUp extends Alert {
         super.getButtonTypes().addAll(SALIR, VOLVER);
         super.setTitle(TITULO);
         super.setContentText(CONTENIDO + puntuacion);
-        ((Stage) this.getDialogPane().getScene().getWindow()).getIcons().add(Imagenes.getRandomSprite(Imagenes.ICONOS).getImage());
+        ((Stage) this.getDialogPane().getScene().getWindow()).getIcons().add(Objects.requireNonNull(Imagenes.getRandomSprite(Imagenes.ICONOS)).getImage());
 
         if (esGanador) {
             super.setHeaderText(GANADOR);

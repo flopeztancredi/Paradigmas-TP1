@@ -8,10 +8,9 @@ import java.util.Random;
 
 public class Juego {
     private final Tablero tablero;
-    private int nivel;
-    private int puntuacion;
-    private int cantTpSafe;
-    private boolean tpActivado;
+    private int nivel = 0;
+    private int cantTpSafe = 0;
+    private boolean tpActivado = false;
 
     public final Vector2 ARRIBA = new Vector2(-1, 0);
     public final Vector2 ABAJO = new Vector2(1, 0);
@@ -20,12 +19,12 @@ public class Juego {
 
     public Juego(int filas, int columnas) {
         this.tablero = new Tablero(filas, columnas);
-        this.nivel = 0;
-        this.cantTpSafe = 0;
-        this.puntuacion = 0;
-        this.tpActivado = false;
     }
 
+    /**
+     * siguienteNivel aumenta el nivel del juego y la cantidad de teleports seguros
+     * y actualiza el tablero con el número de robots correspondientes al nivel
+     */
     public void siguienteNivel() {
         nivel++; cantTpSafe++;
         int r1 = Math.max(tablero.getFilas() * tablero.getColumnas() / 150 + this.nivel-1, 2);
@@ -34,46 +33,67 @@ public class Juego {
     }
 
     public Estado mover(int fila, int columna) {
-        boolean sigueVivo;
-        Vector2 posicion = new Vector2(fila, columna);
+        var posicion = new Vector2(fila, columna);
         if (this.tpActivado) {
-            sigueVivo = tablero.mover(posicion);
             this.cantTpSafe--;
             this.tpActivado = false;
         } else {
             posicion.setX(Integer.compare(fila, tablero.getPosicionJugador().getX()));
             posicion.setY(Integer.compare(columna, tablero.getPosicionJugador().getY()));
             posicion.sumar(tablero.getPosicionJugador());
-            sigueVivo = tablero.mover(posicion);
         }
-        this.puntuacion += tablero.getPuntuacionJugador();
+        boolean sigueVivo = tablero.mover(posicion);
         return definirEstado(sigueVivo);
     }
 
+    /**
+     * mover mueve al Jugador a una posición aleatoria
+     * @return Estado
+     */
     public Estado mover() {
-        boolean sigueJugando = tablero.mover(posAleatoria(this.getFilas(), this.getColumnas()));
-        this.puntuacion += tablero.getPuntuacionJugador();
-        return definirEstado(sigueJugando);
+        boolean sigueVivo = tablero.mover(posAleatoria(this.getFilas(), this.getColumnas()));
+        return definirEstado(sigueVivo);
     }
 
+    /**
+     * quedarse mueve al Jugador a la misma posición en la que se encuentra
+     * @return Estado
+     */
+    public Estado quedarse() {
+        boolean sigueVivo = tablero.mover(tablero.getPosicionJugador());
+        return definirEstado(sigueVivo);
+    }
+
+    /**
+     * moverDireccion mueve al Jugador en la direccion recibida por parámetro
+     * @param direccion Vector2
+     * @return Estado
+     */
     public Estado moverDireccion(Vector2 direccion) {
-        Vector2 posicion = Vector2.sumar(direccion, tablero.getPosicionJugador());
-        if (posicion.getX() >= this.getFilas() || posicion.getX() < 0 || posicion.getY() >= this.getColumnas() || posicion.getY() < 0)
-            return quedarse();
+        var posJugador = tablero.getPosicionJugador();
+        var posicion = Vector2.sumar(direccion, posJugador);
+        if (posicion.getX() >= this.getFilas() || posicion.getX() < 0) posicion.setX(posJugador.getX());
+        if (posicion.getY() >= this.getColumnas() || posicion.getY() < 0) posicion.setY(posJugador.getY());
         return mover(posicion.getX(), posicion.getY());
     }
 
-    public Vector2 posAleatoria(int rangoX, int rangoY) {
+    /**
+     * posAleatoria devuelve una posición aleatoria dentro de un rango
+     * @param rangoX int
+     * @param rangoY int
+     * @return Vector2
+     */
+    private Vector2 posAleatoria(int rangoX, int rangoY) {
         var rand = new Random();
         return new Vector2(rand.nextInt(rangoX), rand.nextInt(rangoY));
     }
 
-    public Estado quedarse() {
-        boolean sigueJugando = tablero.mover(tablero.getPosicionJugador());
-        this.puntuacion += tablero.getPuntuacionJugador();
-        return definirEstado(sigueJugando);
-    }
-
+    /**
+     * definirEstado devuelve PERDIDO si sigueJugando es False. Si sigueJugando, devuelve GANADO si
+     * esGanador es True, devuelve JUGANDO si todavía no hay ganador.
+     * @param sigueJugando boolean
+     * @return Estado
+     */
     private Estado definirEstado(boolean sigueJugando) {
         if (!sigueJugando) {
             return Estado.PERDIDO;
@@ -82,8 +102,9 @@ public class Juego {
         return tablero.esGanador() ? Estado.GANADO : Estado.JUGANDO;
     }
 
-    /* Activar TP */
-
+    /**
+     * toggleTpSafe cambia el estado del teletransporte seguro
+     */
     public void toggleTpSafe() {
         this.tpActivado = !this.tpActivado;
     }
@@ -103,7 +124,7 @@ public class Juego {
     }
 
     public int getPuntuacion() {
-        return puntuacion;
+        return tablero.getPuntuacionJugador();
     }
 
     public int getCantTpSafe() {

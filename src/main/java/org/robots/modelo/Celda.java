@@ -1,7 +1,6 @@
 package org.robots.modelo;
 
 import org.robots.modelo.personajes.Elemento;
-import org.robots.modelo.personajes.Fuego;
 
 public class Celda {
     private Elemento elemento;
@@ -18,18 +17,20 @@ public class Celda {
         return true;
     }
 
+    /**
+     * sacarObjeto elimina al objeto de la celda y lo devuelve
+     * @return Elemento
+     */
     public Elemento sacarObjeto() {
         Elemento objeto = this.elemento;
         this.elemento = null;
         return objeto;
     }
 
+    /* Validaciones */
+
     public boolean estaVacia() {
         return this.elemento == null;
-    }
-
-    public void incendiar(Fuego fuego) {
-        this.elemento = fuego;
     }
 
     public boolean estaIncendiada() {

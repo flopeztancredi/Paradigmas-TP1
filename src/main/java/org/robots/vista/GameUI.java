@@ -8,7 +8,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import org.robots.controlador.InputControlador;
 import org.robots.modelo.Estado;
 import org.robots.modelo.Juego;
 
@@ -48,12 +47,17 @@ public class GameUI extends UI {
         this.parent = loadFXML("juego", this);
     }
 
-    public void inicializarJuego(Juego juego) {
-        Scene scene = new Scene(this.parent, super.getWIDTH(), super.getHEIGHT());
+    /**
+     * Inicializa el juego con el tablero y el juego
+     * @param juego Juego
+     * @param grid GridUI
+     */
+    public void inicializarJuego(Juego juego, GridUI grid) {
         this.juego = juego;
-        this.grid = new GridUI(juego, gridTablero);
-        var gridControlador = new InputControlador(grid, this, juego, scene);
-        gridControlador.iniciar();
+        this.grid = grid;
+        Scene scene = new Scene(this.parent, WIDTH, HEIGHT);
+        grid.inicializarTablero(gridTablero, scene);
+
         juego.siguienteNivel();
         grid.dibujarTablero(Estado.JUGANDO);
 
@@ -61,12 +65,19 @@ public class GameUI extends UI {
         stage.show();
     }
 
+    /**
+     * Actualiza el tablero y los valores del juego
+     * @param estadoJuego Estado
+     */
     public void actualizarEstado(Estado estadoJuego) {
         grid.dibujarTablero(estadoJuego);
         actualizarValores();
         corroborarEstado(estadoJuego);
     }
 
+    /**
+     * Actualiza los valores del juego vistos en la interfaz
+     */
     private void actualizarValores() {
         nivel.setText(String.valueOf(juego.getNivel()));
         points.setText(String.valueOf(juego.getPuntuacion()));
@@ -75,6 +86,10 @@ public class GameUI extends UI {
         btnSafeTp.setStyle((juego.isTpSafe() ? Colores.FONDO_ACTIVO : Colores.FONDO_INACTIVO) + "; " + Colores.BORDE_BLANCO);
     }
 
+    /**
+     * Corrobora el estado del juego y muestra el popUp correspondiente si estadoJuego es GANADO o PERDIDO
+     * @param estadoJuego Estado
+     */
     private void corroborarEstado(Estado estadoJuego) {
         if (estadoJuego == Estado.JUGANDO) return;
 
@@ -92,6 +107,8 @@ public class GameUI extends UI {
             actualizarValores();
         }
     }
+
+    /* Setters */
 
     public void setVolverAlMenuHandler(Runnable runnable) { this.volverAlMenu = runnable; }
 

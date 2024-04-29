@@ -3,7 +3,6 @@ package org.robots.vista;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
@@ -14,9 +13,8 @@ import java.io.IOException;
 
 public class MenuUI extends UI {
     private final int INVALIDO = -1;
-    private final Parent parent;
     private final Stage stage;
-    private Scene scene;
+    private final Scene scene;
 
     @FXML
     private Button btnJugar;
@@ -29,14 +27,19 @@ public class MenuUI extends UI {
 
     public MenuUI(Stage stage) throws IOException {
         this.stage = stage;
-        this.parent = loadFXML("menu", this);
-        this.scene = new Scene(parent, super.getWIDTH(), super.getHEIGHT());
+        var parent = loadFXML("menu", this);
+        this.scene = new Scene(parent, WIDTH, HEIGHT);
     }
 
+    /**
+     * Muestra la escena
+     */
     public void mostrar() {
         stage.setScene(scene);
         stage.show();
     }
+
+    /* Getters */
 
     public int getFilas() {
         int valor;
@@ -61,6 +64,8 @@ public class MenuUI extends UI {
     public Button getBtnJugar() {
         return this.btnJugar;
     }
+
+    /* Setters */
 
     public void setBtnHandler(EventHandler<ActionEvent> handler) {
         btnJugar.setOnAction(handler);
