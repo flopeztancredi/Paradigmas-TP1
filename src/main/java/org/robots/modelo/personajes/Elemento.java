@@ -2,7 +2,7 @@ package org.robots.modelo.personajes;
 
 import org.robots.modelo.herramientas.Vector2;
 
-public class Elemento {
+public abstract class Elemento {
     protected Vector2 posicion;
 
     public Elemento(Vector2 posicion) {
@@ -19,13 +19,9 @@ public class Elemento {
         return this instanceof R1;
     }
 
-    public boolean esRobot2() {
-        return this instanceof R2;
-    }
+    public boolean esRobot2() { return this instanceof R2; }
 
-    public boolean esFuego() {
-        return this instanceof Fuego;
-    }
+    public boolean esFuego() { return this instanceof Fuego; }
 
     /* Getters */
 
