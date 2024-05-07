@@ -40,6 +40,6 @@ public class Celda {
     }
 
     public boolean estaIncendiada() {
-        return (elemento != null && elemento.esFuego());
+        return (elemento != null && elemento.mataRobot());
     }
 }

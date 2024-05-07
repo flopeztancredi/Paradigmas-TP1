@@ -174,7 +174,7 @@ public class Tablero {
      */
     private void manejarColision(Robot robot, Celda celdaParaMoverse) {
         var elemento = celdaParaMoverse.sacarObjeto();
-        if (elemento.esFuego()) {
+        if (elemento.mataRobot()) {
             celdaParaMoverse.asignarObjeto(elemento);
         } else {
             player.sumarPuntos(sacarRobots((Robot) elemento));

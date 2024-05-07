@@ -24,7 +24,7 @@ public class InputControlador {
     }
 
     /**
-     * iniciar le asigna la acción correspondiente al click sobre el tablero así como a los controles del
+     * iniciar le asigna la acción correspondiente al clic sobre el tablero así como a los controles del
      * teclado
      */
     public void iniciar() {
@@ -91,7 +91,7 @@ public class InputControlador {
     }
 
     /**
-     * getCelda devuelve la celda en la que se clickeó a partir del nodo en el que se hizo click
+     * getCelda devuelve la celda en la que se clicó a partir del nodo en el que se hizo click
      * @param e MouseEvent
      * @return Node
      */

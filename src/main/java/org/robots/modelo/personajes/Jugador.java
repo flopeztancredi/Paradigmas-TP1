@@ -8,7 +8,7 @@ public class Jugador extends Elemento implements Movil {
     private int puntuacion;
 
     public Jugador(Vector2 pos) {
-        super(pos);
+        super(pos, "messi");
         puntuacion = 0;
     }
 

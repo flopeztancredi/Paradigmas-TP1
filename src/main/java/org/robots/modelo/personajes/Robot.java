@@ -5,11 +5,10 @@ import org.robots.modelo.Tablero;
 import org.robots.modelo.herramientas.Vector2;
 
 public class Robot extends Elemento implements Movil {
-    private final int puntuacion;
+    private final int PUNTUACION = 25;
 
-    public Robot(Vector2 posicion, int puntuacion) {
-        super(posicion);
-        this.puntuacion = puntuacion;
+    public Robot(Vector2 posicion, String nombre) {
+        super(posicion, nombre);
     }
 
     /**
@@ -39,7 +38,7 @@ public class Robot extends Elemento implements Movil {
     }
 
     public int getPuntuacion() {
-        return puntuacion;
+        return this.PUNTUACION;
     }
 
 }

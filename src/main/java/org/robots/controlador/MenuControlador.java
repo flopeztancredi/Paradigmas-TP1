@@ -17,7 +17,7 @@ public class MenuControlador {
 
     /**
      * Asigna el comportamiento correspondiente al menú.
-     * Al tocar la tecla ENTER o hacer click en el botón, se incializa el juego si las filas y columnas son válidas.
+     * Al tocar la tecla ENTER o hacer clic en el botón, se incializa el juego si las filas y columnas son válidas.
      */
     public void iniciar() {
         menuUI.setBtnHandler(e -> {

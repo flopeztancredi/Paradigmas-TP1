@@ -9,9 +9,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
-import org.robots.modelo.Estado;
 import org.robots.modelo.Juego;
-import org.robots.modelo.personajes.Elemento;
 
 public class GridUI {
     private final Juego juego;
@@ -58,13 +56,13 @@ public class GridUI {
 
     /**
      * Dibuja el tablero con los elementos del juego
-     * @param estadoJuego Estado
      */
-    public void dibujarTablero(Estado estadoJuego) {
+    public void dibujarTablero() {
         vaciarTablero();
         for (var elemento : juego.getElementos()) {
             Pane p = (Pane) gridTablero.getChildren().get(elemento.getY() + elemento.getX() * juego.getColumnas());
-            ImageView sprite = conseguirSprite(elemento, estadoJuego);
+            ImageView sprite = Imagenes.getRandomSprite(elemento.getNombre());
+            assert sprite != null;
             sprite.fitHeightProperty().bind(p.heightProperty());
             sprite.fitWidthProperty().bind(p.widthProperty());
             sprite.setPreserveRatio(true);
@@ -81,28 +79,6 @@ public class GridUI {
                 Pane p = (Pane) gridTablero.getChildren().get(j + i * juego.getColumnas());
                 p.getChildren().clear();
             }
-        }
-    }
-
-    /**
-     * Consigue la sprite del elemento indicado por parámetro según el estadoJuego correspondiente
-     * @param elemento Elemento
-     * @param estadoJuego Estado
-     * @return ImageView
-     */
-    private ImageView conseguirSprite(Elemento elemento, Estado estadoJuego) {
-        if (elemento.esJugador() && estadoJuego == Estado.JUGANDO) {
-            return Imagenes.getRandomSprite(Imagenes.JUGADOR_DEFAULT);
-        } else if (elemento.esJugador() && estadoJuego == Estado.GANADO) {
-            return Imagenes.getRandomSprite(Imagenes.JUGADOR_GANADOR);
-        } else if (elemento.esJugador() && estadoJuego == Estado.PERDIDO) {
-            return Imagenes.getRandomSprite(Imagenes.JUGADOR_PERDEDOR);
-        } else if (elemento.esRobot1()) {
-            return Imagenes.getRandomSprite(Imagenes.ROBOT1_SPRITES);
-        } else if (elemento.esRobot2()) {
-            return Imagenes.getRandomSprite(Imagenes.ROBOT2_SPRITES);
-        } else { // elemento.esFuego()
-            return Imagenes.getRandomSprite(Imagenes.FUEGO_SPRITES);
         }
     }
 
