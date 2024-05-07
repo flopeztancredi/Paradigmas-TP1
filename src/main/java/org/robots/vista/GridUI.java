@@ -101,7 +101,7 @@ public class GridUI {
             return Imagenes.getRandomSprite(Imagenes.ROBOT1_SPRITES);
         } else if (elemento.esRobot2()) {
             return Imagenes.getRandomSprite(Imagenes.ROBOT2_SPRITES);
-        } else {
+        } else { // elemento.esFuego()
             return Imagenes.getRandomSprite(Imagenes.FUEGO_SPRITES);
         }
     }

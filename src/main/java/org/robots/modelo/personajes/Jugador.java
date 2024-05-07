@@ -1,10 +1,10 @@
 package org.robots.modelo.personajes;
 
-import org.robots.modelo.Movimiento;
+import org.robots.modelo.Movil;
 import org.robots.modelo.Tablero;
 import org.robots.modelo.herramientas.Vector2;
 
-public class Jugador extends Elemento implements Movimiento {
+public class Jugador extends Elemento implements Movil {
     private int puntuacion;
 
     public Jugador(Vector2 pos) {
