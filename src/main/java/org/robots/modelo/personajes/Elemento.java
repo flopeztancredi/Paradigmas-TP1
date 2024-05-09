@@ -13,7 +13,7 @@ public abstract class Elemento {
 
     /* Validaciones */
 
-    public boolean mataRobot() {
+    public boolean esObstaculo() {
         return false;
     }
 

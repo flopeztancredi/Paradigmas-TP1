@@ -8,7 +8,7 @@ public class Fuego extends Elemento {
     }
 
     @Override
-    public boolean mataRobot() {
+    public boolean esObstaculo() {
         return true;
     }
 }

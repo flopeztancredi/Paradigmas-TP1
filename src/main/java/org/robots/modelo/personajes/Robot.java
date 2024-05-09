@@ -21,7 +21,7 @@ public class Robot extends Elemento implements Movil {
     public boolean moverse(Vector2 posJugador, Tablero tablero) {
         var movimiento = calcularPosicion(posJugador);
         this.posicion.sumar(movimiento);
-        return !tablero.esPosIncendiada(this.posicion);
+        return !tablero.esPosObstaculizada(this.posicion);
     }
 
     /**
