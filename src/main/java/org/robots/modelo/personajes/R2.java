@@ -11,18 +11,19 @@ public class R2 extends Robot {
     }
 
     /**
-      * moverse para R2 realiza dos movimientos por separado. Devuelve False si alguno de los dos es inválido,
-      * True en caso contrario.
-      * @param posJugador Vector2
-      * @param tablero Tablero
-      * @return boolean
-      */
+     * moverse para R2 realiza dos movimientos por separado. Devuelve False si alguno de los dos es inválido,
+     * True en caso contrario.
+     *
+     * @param posJugador Vector2
+     * @param tablero    Tablero
+     */
     @Override
-    public boolean moverse(Vector2 posJugador, Tablero tablero) {
-        if (!super.moverse(posJugador, tablero)) {
-            return false;
+    public void moverse(Vector2 posJugador, Tablero tablero) {
+        super.moverse(posJugador, tablero);
+        if (tablero.esPosObstaculizada(this.posicion)) {
+            return;
         }
-        return super.moverse(posJugador, tablero);
+        super.moverse(posJugador, tablero);
     }
 
     @Override

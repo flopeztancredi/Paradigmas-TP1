@@ -14,14 +14,13 @@ public class Robot extends Elemento implements Movil {
     /**
      * moverse calcula la posición a la que se debe ir el robot según la posicion del Jugador. Devuelve
      * True si el movimiento es válido, False en caso contrario
+     *
      * @param posJugador Vector2
-     * @param tablero Tablero
-     * @return boolean
+     * @param tablero    Tablero
      */
-    public boolean moverse(Vector2 posJugador, Tablero tablero) {
+    public void moverse(Vector2 posJugador, Tablero tablero) {
         var movimiento = calcularPosicion(posJugador);
         this.posicion.sumar(movimiento);
-        return !tablero.esPosObstaculizada(this.posicion);
     }
 
     /**

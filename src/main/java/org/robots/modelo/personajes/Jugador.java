@@ -14,14 +14,11 @@ public class Jugador extends Elemento implements Movil {
 
     /**
      * moverse asigna la posición pasada por parámetro al jugador, devuelve True
+     *
      * @param posicion Vector2
-     * @param tablero Tablero
-     * @return boolean
+     * @param tablero  Tablero
      */
-    public boolean moverse(Vector2 posicion, Tablero tablero) {
-        this.posicion = posicion;
-        return true;
-    }
+    public void moverse(Vector2 posicion, Tablero tablero) { this.posicion = posicion; }
 
     public void sumarPuntos(int puntos) {
         this.puntuacion += puntos;
