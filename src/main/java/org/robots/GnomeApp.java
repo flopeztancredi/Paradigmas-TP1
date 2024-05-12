@@ -29,7 +29,7 @@ public class GnomeApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         this.stage = stage;
-        stage.getIcons().add(Objects.requireNonNull(Imagenes.getRandomSprite(Imagenes.ICONOS)).getImage());
+        stage.getIcons().add(Objects.requireNonNull(Imagenes.getSprite(Imagenes.ICONO_JUEGO)).getImage());
         stage.setTitle(NOMBRE_JUEGO);
         inicializarMenu();
     }

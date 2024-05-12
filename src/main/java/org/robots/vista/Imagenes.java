@@ -8,53 +8,39 @@ import java.io.FileNotFoundException;
 import java.util.Random;
 
 public class Imagenes {
+    private static final int NUM_SPRITES = 4;
+    private static final String ASSETS_PATH = "assets/";
+    private static final String FILE_EXTENSION = ".png";
 
-    public static final String[] JUGADOR_DEFAULT = {
-            "assets/messi1.png",
-            "assets/messi2.png",
-            "assets/messi3.png"
-    };
-
-    public static final String[] JUGADOR_GANADOR = {
-            "assets/messi_win.png"
-    };
-
-    public static final String[] JUGADOR_PERDEDOR = {
-            "assets/messi_lose.png"
-    };
-
-    public static final String[] ROBOT1_SPRITES = {
-            "assets/vandijk1.png",
-            "assets/vandijk2.png",
-            "assets/vandijk3.png",
-            "assets/vandijk4.png",
-    };
-
-    public static final String[] ROBOT2_SPRITES = {
-            "assets/mbappe1.png",
-            "assets/mbappe2.png",
-            "assets/mbappe3.png",
-            "assets/mbappe4.png",
-    };
-
-    public static final String[] FUEGO_SPRITES = {
-            "assets/fuego.png",
-    };
-
-    public static final String[] ICONOS = {
-            "assets/copa.png",
-    };
+    public static final String JUGADOR_GANADOR = "messi_win";
+    public static final String JUGADOR_PERDEDOR = "messi_lose";
+    public static final String ICONO_JUEGO = "copa";
 
     /**
-     * Devuelve una imagen aleatoria del array de rutas indicado por parámetro
-     * @param ruta String[]
+     * Devuelve una imagen aleatoria del tipo de elemento indicado
+     * @param tipoElemento String
      * @return ImageView
      */
-    public static ImageView getRandomSprite(String[] ruta) {
+    public static ImageView getRandomSprite(String tipoElemento) {
         Random random = new Random();
-        int index = random.nextInt(ruta.length);
+        int index = random.nextInt(NUM_SPRITES);
+        String ruta = ASSETS_PATH + tipoElemento + index + FILE_EXTENSION;
         try {
-            return loadImage(ruta[index]);
+            return loadImage(ruta);
+        } catch (FileNotFoundException e) {
+            return getSprite(tipoElemento);
+        }
+    }
+
+    /**
+     * Devuelve la imagen del tipo de elemento indicado
+     * @param tipoElemento String
+     * @return ImageView
+     */
+    public static ImageView getSprite(String tipoElemento) {
+        String ruta = ASSETS_PATH + tipoElemento + FILE_EXTENSION;
+        try {
+            return loadImage(ruta);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return null;

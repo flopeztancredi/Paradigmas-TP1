@@ -12,11 +12,6 @@ public class Juego {
     private int cantTpSafe = 0;
     private boolean tpActivado = false;
 
-    public final Vector2 ARRIBA = new Vector2(-1, 0);
-    public final Vector2 ABAJO = new Vector2(1, 0);
-    public final Vector2 IZQUIERDA = new Vector2(0, -1);
-    public final Vector2 DERECHA = new Vector2(0, 1);
-
     public Juego(int filas, int columnas) {
         this.tablero = new Tablero(filas, columnas);
     }

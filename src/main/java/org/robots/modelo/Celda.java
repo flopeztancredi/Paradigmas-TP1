@@ -39,7 +39,9 @@ public class Celda {
         return this.elemento == null;
     }
 
-    public boolean estaIncendiada() {
-        return (elemento != null && elemento.esFuego());
+    /* Getters */
+
+    public Elemento getElemento() {
+        return elemento;
     }
 }

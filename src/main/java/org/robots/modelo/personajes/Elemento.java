@@ -2,32 +2,26 @@ package org.robots.modelo.personajes;
 
 import org.robots.modelo.herramientas.Vector2;
 
-public class Elemento {
+public abstract class Elemento {
+    private final String nombre;
     protected Vector2 posicion;
 
-    public Elemento(Vector2 posicion) {
+    public Elemento(Vector2 posicion, String nombre) {
         this.posicion = posicion;
+        this.nombre = nombre;
     }
 
     /* Validaciones */
 
-    public boolean esJugador() {
-        return this instanceof Jugador;
-    }
-
-    public boolean esRobot1() {
-        return this instanceof R1;
-    }
-
-    public boolean esRobot2() {
-        return this instanceof R2;
-    }
-
-    public boolean esFuego() {
-        return this instanceof Fuego;
+    public boolean esObstaculo() {
+        return false;
     }
 
     /* Getters */
+
+    public String getNombre() {
+        return this.nombre;
+    }
 
     public Vector2 getPosicion() {
         return posicion;

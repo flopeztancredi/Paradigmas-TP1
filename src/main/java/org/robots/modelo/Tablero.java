@@ -29,7 +29,11 @@ public class Tablero {
 
     public boolean esPosValida(Vector2 posicion) { return celdas[posicion.getX()][posicion.getY()].estaVacia(); }
 
-    public boolean esPosIncendiada(Vector2 posicion) { return celdas[posicion.getX()][posicion.getY()].estaIncendiada(); }
+    public boolean esPosObstaculizada(Vector2 posicion) {
+        var elemento =  conseguirCelda(posicion).getElemento();
+        if (elemento == null) return false;
+        return elemento.esObstaculo();
+    }
 
     public boolean esGanador() { return this.robots.isEmpty(); }
 
@@ -174,7 +178,7 @@ public class Tablero {
      */
     private void manejarColision(Robot robot, Celda celdaParaMoverse) {
         var elemento = celdaParaMoverse.sacarObjeto();
-        if (elemento.esFuego()) {
+        if (elemento.esObstaculo()) {
             celdaParaMoverse.asignarObjeto(elemento);
         } else {
             player.sumarPuntos(sacarRobots((Robot) elemento));

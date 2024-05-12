@@ -1,28 +1,25 @@
 package org.robots.modelo.personajes;
 
-import org.robots.modelo.Movimiento;
+import org.robots.modelo.Movil;
 import org.robots.modelo.Tablero;
 import org.robots.modelo.herramientas.Vector2;
 
-public class Robot extends Elemento implements Movimiento {
-    private final int puntuacion;
+public class Robot extends Elemento implements Movil {
+    private final int PUNTUACION = 25;
 
-    public Robot(Vector2 posicion, int puntuacion) {
-        super(posicion);
-        this.puntuacion = puntuacion;
+    public Robot(Vector2 posicion, String nombre) {
+        super(posicion, nombre);
     }
 
     /**
-     * moverse calcula la posición a la que se debe ir el robot según la posicion del Jugador. Devuelve
-     * True si el movimiento es válido, False en caso contrario
+     * moverse calcula la posición a la que se debe ir el robot según la posicion del Jugador.
+     *
      * @param posJugador Vector2
-     * @param tablero Tablero
-     * @return boolean
+     * @param tablero    Tablero
      */
-    public boolean moverse(Vector2 posJugador, Tablero tablero) {
+    public void moverse(Vector2 posJugador, Tablero tablero) {
         var movimiento = calcularPosicion(posJugador);
         this.posicion.sumar(movimiento);
-        return !tablero.esPosIncendiada(this.posicion);
     }
 
     /**
@@ -39,7 +36,7 @@ public class Robot extends Elemento implements Movimiento {
     }
 
     public int getPuntuacion() {
-        return puntuacion;
+        return this.PUNTUACION;
     }
 
 }

@@ -6,6 +6,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import org.robots.modelo.Estado;
 import org.robots.modelo.Juego;
+import org.robots.modelo.herramientas.Direccion;
 import org.robots.modelo.herramientas.Vector2;
 import org.robots.vista.GameUI;
 import org.robots.vista.GridUI;
@@ -23,7 +24,7 @@ public class InputControlador {
     }
 
     /**
-     * iniciar le asigna la acción correspondiente al click sobre el tablero así como a los controles del
+     * iniciar le asigna la acción correspondiente al clic sobre el tablero así como a los controles del
      * teclado
      */
     public void iniciar() {
@@ -39,19 +40,19 @@ public class InputControlador {
             var cambio = false;
             switch (e.getCode()) {
                 case W:
-                    estadoJuego = juego.moverDireccion(juego.ARRIBA);
+                    estadoJuego = juego.moverDireccion(Direccion.ARRIBA.getDir());
                     cambio = true;
                     break;
                 case A:
-                    estadoJuego = juego.moverDireccion(juego.IZQUIERDA);
+                    estadoJuego = juego.moverDireccion(Direccion.IZQUIERDA.getDir());
                     cambio = true;
                     break;
                 case S:
-                    estadoJuego = juego.moverDireccion(juego.ABAJO);
+                    estadoJuego = juego.moverDireccion(Direccion.ABAJO.getDir());
                     cambio = true;
                     break;
                 case D:
-                    estadoJuego = juego.moverDireccion(juego.DERECHA);
+                    estadoJuego = juego.moverDireccion(Direccion.DERECHA.getDir());
                     cambio = true;
                     break;
                 case CONTROL:
@@ -59,19 +60,19 @@ public class InputControlador {
                     cambio = true;
                     break;
                 case Q:
-                    estadoJuego = juego.moverDireccion(Vector2.sumar(juego.ARRIBA, juego.IZQUIERDA));
+                    estadoJuego = juego.moverDireccion(Vector2.sumar(Direccion.ARRIBA.getDir(), Direccion.IZQUIERDA.getDir()));
                     cambio = true;
                     break;
                 case E:
-                    estadoJuego = juego.moverDireccion(Vector2.sumar(juego.ARRIBA, juego.DERECHA));
+                    estadoJuego = juego.moverDireccion(Vector2.sumar(Direccion.ARRIBA.getDir(), Direccion.DERECHA.getDir()));
                     cambio = true;
                     break;
                 case Z:
-                    estadoJuego = juego.moverDireccion(Vector2.sumar(juego.ABAJO, juego.IZQUIERDA));
+                    estadoJuego = juego.moverDireccion(Vector2.sumar(Direccion.ABAJO.getDir(), Direccion.IZQUIERDA.getDir()));
                     cambio = true;
                     break;
                 case C:
-                    estadoJuego = juego.moverDireccion(Vector2.sumar(juego.ABAJO, juego.DERECHA));
+                    estadoJuego = juego.moverDireccion(Vector2.sumar(Direccion.ABAJO.getDir(), Direccion.DERECHA.getDir()));
                     cambio = true;
                     break;
                 case T:
@@ -90,7 +91,7 @@ public class InputControlador {
     }
 
     /**
-     * getCelda devuelve la celda en la que se clickeó a partir del nodo en el que se hizo click
+     * getCelda devuelve la celda en la que se clicó a partir del nodo en el que se hizo click
      * @param e MouseEvent
      * @return Node
      */

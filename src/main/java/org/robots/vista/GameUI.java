@@ -59,7 +59,7 @@ public class GameUI extends UI {
         grid.inicializarTablero(gridTablero, scene);
 
         juego.siguienteNivel();
-        grid.dibujarTablero(Estado.JUGANDO);
+        grid.dibujarTablero();
 
         stage.setScene(scene);
         stage.show();
@@ -70,7 +70,7 @@ public class GameUI extends UI {
      * @param estadoJuego Estado
      */
     public void actualizarEstado(Estado estadoJuego) {
-        grid.dibujarTablero(estadoJuego);
+        grid.dibujarTablero();
         actualizarValores();
         corroborarEstado(estadoJuego);
     }
@@ -103,7 +103,7 @@ public class GameUI extends UI {
             reiniciarJuego.run();
         } else if (buttonType.equals(PopUp.AVANZAR)) {
             juego.siguienteNivel();
-            grid.dibujarTablero(Estado.JUGANDO);
+            grid.dibujarTablero();
             actualizarValores();
         }
     }
