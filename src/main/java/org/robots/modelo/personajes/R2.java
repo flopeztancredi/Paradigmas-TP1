@@ -11,8 +11,7 @@ public class R2 extends Robot {
     }
 
     /**
-     * moverse para R2 realiza dos movimientos por separado. Devuelve False si alguno de los dos es inválido,
-     * True en caso contrario.
+     * moverse para R2 realiza dos movimientos por separado.
      *
      * @param posJugador Vector2
      * @param tablero    Tablero

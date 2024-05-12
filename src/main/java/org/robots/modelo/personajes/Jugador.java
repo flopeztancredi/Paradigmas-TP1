@@ -13,7 +13,7 @@ public class Jugador extends Elemento implements Movil {
     }
 
     /**
-     * moverse asigna la posición pasada por parámetro al jugador, devuelve True
+     * moverse asigna la posición pasada por parámetro al jugador
      *
      * @param posicion Vector2
      * @param tablero  Tablero

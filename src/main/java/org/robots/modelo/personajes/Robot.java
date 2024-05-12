@@ -12,8 +12,7 @@ public class Robot extends Elemento implements Movil {
     }
 
     /**
-     * moverse calcula la posición a la que se debe ir el robot según la posicion del Jugador. Devuelve
-     * True si el movimiento es válido, False en caso contrario
+     * moverse calcula la posición a la que se debe ir el robot según la posicion del Jugador.
      *
      * @param posJugador Vector2
      * @param tablero    Tablero
